@@ -15602,6 +15602,15 @@ THREE.MorphAnimMesh.prototype.clone = function ( object ) {
  * @author alteredq / http://alteredqualia.com/
  * @author mrdoob / http://mrdoob.com/
  */
+//  目录src/objects/LOD.js  
+//对lod的源码进行了注释  
+
+/*LOD技术即Levels of Detail的简称，意为多细节层次。
+LOD技术指根据物体模型的节点在显示环境中所处的位置和重要度，
+决定物体渲染的资源分配，降低非重要物体的面数和细节度，
+从而获得高效率的渲染运算。
+注释摘抄自http://blog.csdn.net/u011209953/article/details/37863701
+*/
 
 THREE.LOD = function () {
 
@@ -15614,13 +15623,15 @@ THREE.LOD = function () {
 
 THREE.LOD.prototype = Object.create( THREE.Object3D.prototype );
 
+    //添加细节  
+
 THREE.LOD.prototype.addLevel = function ( object, distance ) {
 
-	if ( distance === undefined ) distance = 0;
+	if ( distance === undefined ) distance = 0; //未定义距离时为0  
 
-	distance = Math.abs( distance );
+	distance = Math.abs( distance );  //取距离的绝对值 
 
-	for ( var l = 0; l < this.objects.length; l ++ ) {
+	for ( var l = 0; l < this.objects.length; l ++ ) {	//将各个细节的距离进行从小到大的排序  
 
 		if ( distance < this.objects[ l ].distance ) {
 
@@ -15635,8 +15646,10 @@ THREE.LOD.prototype.addLevel = function ( object, distance ) {
 
 };
 
+ //根据距离返回对应层次的对象  
+ 
 THREE.LOD.prototype.getObjectForDistance = function ( distance ) {
-
+    //排序由小到大遍历  
 	for ( var i = 1, l = this.objects.length; i < l; i ++ ) {
 
 		if ( distance < this.objects[ i ].distance ) {
@@ -15667,29 +15680,30 @@ THREE.LOD.prototype.raycast = ( function () {
 
 }() );
 
+    //更新显示的层次  
 THREE.LOD.prototype.update = function () {
 
 	var v1 = new THREE.Vector3();
 	var v2 = new THREE.Vector3();
 
 	return function ( camera ) {
-
+        //当细节层次不为1时  
 		if ( this.objects.length > 1 ) {
 
-			v1.setFromMatrixPosition( camera.matrixWorld );
-			v2.setFromMatrixPosition( this.matrixWorld );
+			v1.setFromMatrixPosition( camera.matrixWorld );//相机的矩阵
+			v2.setFromMatrixPosition( this.matrixWorld );//LOD的矩阵
 
-			var distance = v1.distanceTo( v2 );
+			var distance = v1.distanceTo( v2 );//相机到LOD的距离 
 
-			this.objects[ 0 ].object.visible = true;
-
+			this.objects[ 0 ].object.visible = true;//第一层（细节最详细）的可见性为true  
+			//向细节不详细的层次距离遍历 
 			for ( var i = 1, l = this.objects.length; i < l; i ++ ) {
-
+                //距离小的详细程度高的可见度为false  
 				if ( distance >= this.objects[ i ].distance ) {
 
 					this.objects[ i - 1 ].object.visible = false;
 					this.objects[ i     ].object.visible = true;
-
+                //到达对应的详细程度的距离区间后跳出  
 				} else {
 
 					break;
@@ -15697,7 +15711,7 @@ THREE.LOD.prototype.update = function () {
 				}
 
 			}
-
+            //对应级别向后的可见度为false  
 			for ( ; i < l; i ++ ) {
 
 				this.objects[ i ].object.visible = false;
@@ -15711,11 +15725,11 @@ THREE.LOD.prototype.update = function () {
 }();
 
 THREE.LOD.prototype.clone = function ( object ) {
-
+    //未定义时声明lod  
 	if ( object === undefined ) object = new THREE.LOD();
-
+    //将LOD复制到object中  
 	THREE.Object3D.prototype.clone.call( this, object );
-
+    //依次添加每个细节到object中  
 	for ( var i = 0, l = this.objects.length; i < l; i ++ ) {
 		var x = this.objects[ i ].object.clone();
 		x.visible = i === 0;
@@ -15801,6 +15815,7 @@ THREE.Sprite.prototype.clone = function ( object ) {
 };
 
 // Backwards compatibility
+//向下兼容,将THREE.Particle 替换为 THREE.Sprite;
 
 THREE.Particle = THREE.Sprite;
 
