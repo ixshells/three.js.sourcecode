@@ -284,7 +284,7 @@ THREE.Color.prototype = {
 	///HSL颜色HSL和HSV都是一种将RGB色彩模型中的点在圆柱坐标系中的表示法。这两种表示法试图做到比RGB基于笛卡尔
 	///坐标系的几何结构更加直观.HSL即色相、饱和度、亮度（英语：Hue, Saturation, Lightness）
 	///
-	/// 色相（H）是色彩的基本属性，就是平常所说的颜色名称，如红色、黄色等，取值范围是0-360
+	/// 色相（H）是色彩的基本属性，就是平常所说的颜色名称，如红色、绿色、蓝色等将360度的一个圆环平分成3分，0(360),120,240，取值范围是0-360
 	/// 饱和度（S）是指色彩的纯度，越高色彩越纯，低则逐渐变灰，取0-100%的数值，输入时为0.0-1.0.
 	/// 明度（V），亮度（L），取0-100%，输入时为0.0-1.0.
 	///
@@ -303,13 +303,15 @@ THREE.Color.prototype = {
 		// h,s,l ranges are in 0.0 - 1.0
 		//h,s,l 取值范围是 0.0 - 1.0
 
-		if ( s === 0 ) {
+		if ( s === 0 ) {	//如果s=0,表示灰色,
 
-			this.r = this.g = this.b = l;
+			this.r = this.g = this.b = l;	//定义rgb都为l.
 
-		} else {
+		} else {	//否则测试l的值
 
-			var hue2rgb = function ( p, q, t ) {
+			//定义一个方法hue2rgb,将hsl颜色转换成rgb颜色值。更多关于hsl颜色模型和hsl转换成rgb方面的内容
+			//参考下面的实例或者查看维基百科。
+			var hue2rgb = function ( p, q, t ) {	
 
 				if ( t < 0 ) t += 1;
 				if ( t > 1 ) t -= 1;
@@ -320,7 +322,27 @@ THREE.Color.prototype = {
 
 			};
 
-			var p = l <= 0.5 ? l * ( 1 + s ) : l + s - ( l * s );
+			//如果l<=0.5，p=l*(1+s),否则p等于l+s-(l*s);
+			/*实例1：
+			 	hsl(0.3333,0.3,0.4),
+			 	p = l <= 0.5 ? l * ( 1 + s ) = 0.4 * (1 + 0.3) = 0.52,
+			 	q = ( 2 * l ) - p = (2 * 0.4) - 0.52 = 0.28
+
+			 	this.r = hue2rgb(q,p,h + 1/3) = hue2rgb(0.52,0.28,0.6666) = 
+			 		[if ( t < 2 / 3 ) return p + ( q - p ) * 6 * ( 2 / 3 - t )] = 
+			 		0.28 +(0.52 - 0.28) *6 *( 2/3 - 0.6666333333333333) = 0.2800048
+
+				this.g = hue2rgb(q,p,h) = hue2rgb(0.52,0.28,0.3333) = 
+					[if ( t < 1 / 2 ) return q] = 0.52
+
+				this.b = hue2rgb(q,p,h - 1/3) = hue2rgb(0.52,0.28,-0.000333) =
+					[return p] = 0.28
+
+				因此rgb(0.2800048 * 255，0.52 * 255，0.28 * 255)  = rgb(71,132,71)
+																  = hex(0x478447)
+			*/
+
+			var p = l <= 0.5 ? l * ( 1 + s ) : l + s - ( l * s ); 
 			var q = ( 2 * l ) - p;
 
 			this.r = hue2rgb( q, p, h + 1 / 3 );
@@ -329,7 +351,7 @@ THREE.Color.prototype = {
 
 		}
 
-		return this;
+		return this; //返回颜色对象。
 
 	},
 
