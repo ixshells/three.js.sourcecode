@@ -194,16 +194,19 @@ THREE.RGBA_PVRTC_2BPPV1_Format = 2103;
 /**
  * @author mrdoob / http://mrdoob.com/
  */
+/*color构造方法
+@color 参数为一个rgb颜色值 rgb(256,256,256) 或者一个0x开头的6位16进制颜色值(0xaabbff);
+*/
 
 THREE.Color = function ( color ) {
 
-	if ( arguments.length === 3 ) {
+	if ( arguments.length === 3 ) {	//当传递参数为rgb颜色值时
 
-		return this.setRGB( arguments[ 0 ], arguments[ 1 ], arguments[ 2 ] );
+		return this.setRGB( arguments[ 0 ], arguments[ 1 ], arguments[ 2 ] );	//设置rgb颜色值
 
 	}
 
-	return this.set( color )
+	return this.set( color )	//设置16进制颜色值
 
 };
 
@@ -211,11 +214,16 @@ THREE.Color.prototype = {
 
 	constructor: THREE.Color,
 
-	r: 1, g: 1, b: 1,
-
+	r: 1, g: 1, b: 1,	//初始化属性（颜色值）r,g,b为1
+	/*set 方法
+	///颜色对象内置的set方法，将16进制颜色值，rgb颜色值，颜色对象复制给当前实例。
+	*/
+	///<summary>set</summary>
+	///<param name ="value" type="Color(颜色对象)" type="number(16进制颜色值）" type="string(rgb颜色值)">颜色</param>
+	///<returns type="Color">返回颜色对象</returns>
 	set: function ( value ) {
 
-		if ( value instanceof THREE.Color ) {
+		if ( value instanceof THREE.Color ) {	
 
 			this.copy( value );
 
@@ -229,21 +237,27 @@ THREE.Color.prototype = {
 
 		}
 
-		return this;
+		return this;	//返回颜色对象
 
 	},
-
+	/*setHex方法
+	///setHex方法用于设置16进制颜色值给当前实例
+	*/
+	///summary>setHex</summary>
+	///<param name ="hex" type="number(16进制颜色值0xffddff）">16进制数值0xffddff</param>
+	///<returns type="Color">返回颜色对象</returns>
 	setHex: function ( hex ) {
 
 		hex = Math.floor( hex );
 
-		this.r = ( hex >> 16 & 255 ) / 255;
-		this.g = ( hex >> 8 & 255 ) / 255;
-		this.b = ( hex & 255 ) / 255;
+		this.r = ( hex >> 16 & 255 ) / 255; //将左边两位16进制数值变换成rgb颜色值对应的red，并赋值给属性Color.r。
+		this.g = ( hex >> 8 & 255 ) / 255;  //将中间两位16进制数值变换成rgb颜色值对应的green，并赋值给属性Color.g。
+		this.b = ( hex & 255 ) / 255;	    //将右边两位16进制数值变换成rgb颜色值对应的blue，并赋值给属性Color.b。
 
-		return this;
+		return this;	//返回颜色对象
 
 	},
+
 
 	setRGB: function ( r, g, b ) {
 
