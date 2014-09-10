@@ -284,7 +284,7 @@ THREE.Color.prototype = {
 	///HSL颜色HSL和HSV都是一种将RGB色彩模型中的点在圆柱坐标系中的表示法。这两种表示法试图做到比RGB基于笛卡尔
 	///坐标系的几何结构更加直观.HSL即色相、饱和度、亮度（英语：Hue, Saturation, Lightness）
 	///
-	/// 色相（H）是色彩的基本属性，就是平常所说的颜色名称，如红色、绿色、蓝色等将360度的一个圆环平分成3分，0(360),120,240，取值范围是0-360
+	/// 色相（H）是色彩的基本属性，就是平常所说的颜色名称，如红色、绿色、蓝色等将360度的一个圆环平分成3分，0(360),120,240，取值范围是0-360，本库将区间设置为0.0-1.0。
 	/// 饱和度（S）是指色彩的纯度，越高色彩越纯，低则逐渐变灰，取0-100%的数值，输入时为0.0-1.0.
 	/// 明度（V），亮度（L），取0-100%，输入时为0.0-1.0.
 	///
@@ -293,7 +293,7 @@ THREE.Color.prototype = {
 	///setHSL方法用于设置 hsl(360,1.0,0.5)颜色值给当前实例
 	*/
 	///<summary>setHSL</summary>
-	///<param name ="h" type="number(0-360）">hue(0-360)色相</param>
+	///<param name ="h" type="number(0.0-1.0）">hue(0.0-1.0)色相</param>
 	///<param name ="s" type="number(0.0-1.0）">saturation(0.0-1.0)饱和度</param>
 	///<param name ="l" type="number(0.0-1.0）">lightness(0.0-1.0)亮度</param>
 	///<returns type="Color">返回颜色对象</returns>
