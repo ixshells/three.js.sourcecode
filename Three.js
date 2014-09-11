@@ -309,16 +309,17 @@ THREE.Color.prototype = {
 
 		} else {	//否则测试l的值
 
-			//定义一个方法hue2rgb,将hsl颜色转换成rgb颜色值。更多关于hsl颜色模型和hsl转换成rgb方面的内容
+			//定义一个方法hue2rgb,将hsl颜色转换成rgb颜色值,根据第三个参数计算rgb的值。
+			//更多关于hsl颜色模型和hsl转换成rgb方面的内容
 			//参考下面的实例或者查看维基百科。
-			var hue2rgb = function ( p, q, t ) {	
+			var hue2rgb = function ( p, q, t ) {		
 
-				if ( t < 0 ) t += 1;
-				if ( t > 1 ) t -= 1;
-				if ( t < 1 / 6 ) return p + ( q - p ) * 6 * t;
-				if ( t < 1 / 2 ) return q;
-				if ( t < 2 / 3 ) return p + ( q - p ) * 6 * ( 2 / 3 - t );
-				return p;
+				if ( t < 0 ) t += 1;	//设置t在1.0的取值范围内
+				if ( t > 1 ) t -= 1;	//设置t在1.0的取值范围内
+				if ( t < 1 / 6 ) return p + ( q - p ) * 6 * t;	//如果t的值小于1/6,返回color对应的rgb属性值.
+				if ( t < 1 / 2 ) return q;		//如果t的值小于1/2,返回color对应的rgb属性值.
+				if ( t < 2 / 3 ) return p + ( q - p ) * 6 * ( 2 / 3 - t );		//如果t的值小于2/3,返回color对应的rgb属性值.
+				return p;		//返回color对应的rgb属性值.
 
 			};
 
@@ -355,103 +356,159 @@ THREE.Color.prototype = {
 
 	},
 
+	/*setStyle方法
+	///setStyle方法用于通过参数style传递不同的rgb颜色值表示类型给当前实例,列出了以下5种样式，分别是：
+	///		rgb(255,0,0)	数值型
+	///		rgb(100%,0%,0%)	百分比型
+	///		#ff0000 		6位16进制型
+	///		#f00 			3位16进制型
+	///		red 			颜色名
+	///		
+	///
+	///更多关于rgb颜色的内容参考维基百科,http://zh.wikipedia.org/wiki/%E4%B8%89%E5%8E%9F%E8%89%B2%E5%85%89%E6%A8%A1%E5%BC%8F
+	///或 http://zh.wikipedia.org/wiki/%E7%BD%91%E9%A1%B5%E9%A2%9C%E8%89%B2
+	*/
+	///<summary>setStyle</summary>
+	///<param name ="style" type="string">style</param>
+	///<returns type="Color">返回颜色对象</returns>
 	setStyle: function ( style ) {
 
 		// rgb(255,0,0)
+		// 
+		//将我们平常习惯的颜色值表达形式rgb(255,0,0)-数值型，转换成THREE.JS认识的形式0.0-1.0，
+		//这里将取值范围从0-255换算成0.0-1.0.
 
-		if ( /^rgb\((\d+), ?(\d+), ?(\d+)\)$/i.test( style ) ) {
+		if ( /^rgb\((\d+), ?(\d+), ?(\d+)\)$/i.test( style ) ) {	//用正则表达式检查当前传递的颜色值表达样式是否为数值型rgb(255,0,0)
 
-			var color = /^rgb\((\d+), ?(\d+), ?(\d+)\)$/i.exec( style );
+			var color = /^rgb\((\d+), ?(\d+), ?(\d+)\)$/i.exec( style );	//将字符串中的数值赋值给color，color是一个数组。
 
-			this.r = Math.min( 255, parseInt( color[ 1 ], 10 ) ) / 255;
-			this.g = Math.min( 255, parseInt( color[ 2 ], 10 ) ) / 255;
-			this.b = Math.min( 255, parseInt( color[ 3 ], 10 ) ) / 255;
+			this.r = Math.min( 255, parseInt( color[ 1 ], 10 ) ) / 255;		//将数组中的第2个元素转换成10进制int类型整数，判断是否小于255，然后除以255，得出小数，复制给Color.r
+			this.g = Math.min( 255, parseInt( color[ 2 ], 10 ) ) / 255;		//将数组中的第3个元素转换成10进制int类型整数，判断是否小于255，然后除以255，得出小数，复制给Color.g
+			this.b = Math.min( 255, parseInt( color[ 3 ], 10 ) ) / 255;		//将数组中的第4个元素转换成10进制int类型整数，判断是否小于255，然后除以255，得出小数，复制给Color.b
 
-			return this;
+			return this; //返回颜色对象。
 
 		}
 
 		// rgb(100%,0%,0%)
+		//将我们平常习惯的颜色值表达形式rgb(100%,0%,0%)-百分比型，转换成THREE.JS认识的形式0.0-1.0，
+		//这里将取值范围从0%-100%换算成0.0-1.0.
 
-		if ( /^rgb\((\d+)\%, ?(\d+)\%, ?(\d+)\%\)$/i.test( style ) ) {
+		if ( /^rgb\((\d+)\%, ?(\d+)\%, ?(\d+)\%\)$/i.test( style ) ) {	//用正则表达式检查当前传递的颜色值表达样式是否为百分比型rgb(100%,0%,0%)
 
-			var color = /^rgb\((\d+)\%, ?(\d+)\%, ?(\d+)\%\)$/i.exec( style );
+			var color = /^rgb\((\d+)\%, ?(\d+)\%, ?(\d+)\%\)$/i.exec( style );	//将字符串中的数值赋值给color，color是一个数组。
 
-			this.r = Math.min( 100, parseInt( color[ 1 ], 10 ) ) / 100;
-			this.g = Math.min( 100, parseInt( color[ 2 ], 10 ) ) / 100;
-			this.b = Math.min( 100, parseInt( color[ 3 ], 10 ) ) / 100;
+			this.r = Math.min( 100, parseInt( color[ 1 ], 10 ) ) / 100;		//将数组中的第2个元素转换成10进制int类型整数，判断是否小于100，然后除以100，得出小数，复制给Color.r
+			this.g = Math.min( 100, parseInt( color[ 2 ], 10 ) ) / 100;		//将数组中的第3个元素转换成10进制int类型整数，判断是否小于100，然后除以100，得出小数，复制给Color.g
+			this.b = Math.min( 100, parseInt( color[ 3 ], 10 ) ) / 100;		//将数组中的第4个元素转换成10进制int类型整数，判断是否小于100，然后除以100，得出小数，复制给Color.b
 
-			return this;
+			return this; //返回颜色对象。
 
 		}
 
 		// #ff0000
+		//将我们平常习惯的颜色值表达形式#ff0000-6位16进制型，转换成THREE.JS认识的形式0.0-1.0，
+		//这里将取值范围从00-ff换算成0.0-1.0.
+		
+		if ( /^\#([0-9a-f]{6})$/i.test( style ) ) {		//用正则表达式检查当前传递的颜色值表达样式是否为6位16进制型 #ff0000
 
-		if ( /^\#([0-9a-f]{6})$/i.test( style ) ) {
+			var color = /^\#([0-9a-f]{6})$/i.exec( style );		//将字符串中的数值赋值给color，color是一个数组。
 
-			var color = /^\#([0-9a-f]{6})$/i.exec( style );
+			this.setHex( parseInt( color[ 1 ], 16 ) );	//将数组中的第2个元素转换成16进制int类型整数.调用setHex 方法，将16进制数值赋值给Color.r,Color.g,Color.b
 
-			this.setHex( parseInt( color[ 1 ], 16 ) );
-
-			return this;
+			return this; //返回颜色对象。
 
 		}
 
 		// #f00
+		//将我们平常习惯的颜色值表达形式#f00-3位16进制型，转换成THREE.JS认识的形式0.0-1.0，
+		//这里将取值范围从0-f换算成0.0-1.0.
+		
+		if ( /^\#([0-9a-f])([0-9a-f])([0-9a-f])$/i.test( style ) ) {	//用正则表达式检查当前传递的颜色值表达样式是否为3位16进制型 #f00
 
-		if ( /^\#([0-9a-f])([0-9a-f])([0-9a-f])$/i.test( style ) ) {
+			var color = /^\#([0-9a-f])([0-9a-f])([0-9a-f])$/i.exec( style );	//将字符串中的数值赋值给color，color是一个数组。
 
-			var color = /^\#([0-9a-f])([0-9a-f])([0-9a-f])$/i.exec( style );
+			this.setHex( parseInt( color[ 1 ] + color[ 1 ] + color[ 2 ] + color[ 2 ] + color[ 3 ] + color[ 3 ], 16 ) );	//将数组中的第2，3,4个元素*2，转换成16进制int类型整数.调用setHex 方法，将16进制数值赋值给Color.r,Color.g,Color.b
 
-			this.setHex( parseInt( color[ 1 ] + color[ 1 ] + color[ 2 ] + color[ 2 ] + color[ 3 ] + color[ 3 ], 16 ) );
-
-			return this;
+			return this; //返回颜色对象。
 
 		}
 
 		// red
+		//将我们平常习惯的颜色值表达形式red颜色名，转换成THREE.JS认识的形式0.0-1.0，
+		//这里将颜色名换算成0.0-1.0.
 
-		if ( /^(\w+)$/i.test( style ) ) {
+		if ( /^(\w+)$/i.test( style ) ) {	//用正则表达式检查当前传递的颜色值表达样式是否为颜色名，即参数style中是否只是字符串没有数字。
 
-			this.setHex( THREE.ColorKeywords[ style ] );
+			this.setHex( THREE.ColorKeywords[ style ] );	//将字符串作为THREE.ColorKeywords对象的属性名，取出与该属性名相对应的16进制的属性值.调用setHex 方法，将16进制的属性值赋值给Color.r,Color.g,Color.b
 
-			return this;
+			return this;	//返回颜色对象。
 
 		}
 
 
 	},
 
+	/*copy方法
+	///copy方法用于赋值颜色属性给当前实例
+	*/
+	///<summary>copy</summary>
+	///<param name ="color" type="THREE.Color">color</param>
+	///<returns type="Color">返回颜色对象</returns>
 	copy: function ( color ) {
 
 		this.r = color.r;
 		this.g = color.g;
 		this.b = color.b;
 
-		return this;
+		return this;	//返回颜色对象。
 
 	},
 
+
+	/****************************************
+	****下面函数用于对色彩的Gamma 曲线调整，对色彩进行补偿之类的吧，
+	****使图形图像色彩更加的绚丽，不至于失真。
+	****更多专业知识求大神补充。
+	****************************************/
+
+	/*copyGammaToLinear方法
+	///copyGammaToLinear方法用于将color的rgb值分别平方，赋给调用者对象
+	*/
+	///<summary>copyGammaToLinear</summary>
+	///<param name ="color" type="THREE.Color">color</param>
+	///<returns type="Color">返回颜色对象</returns>
 	copyGammaToLinear: function ( color ) {
 
 		this.r = color.r * color.r;
 		this.g = color.g * color.g;
 		this.b = color.b * color.b;
 
-		return this;
+		return this;	//返回颜色对象。
 
 	},
 
+	/*copyLinearToGamma方法
+	///copyLinearToGamma方法用于将color的rgb值分别开方，赋给调用者对象
+	*/
+	///<summary>copyLinearToGamma</summary>
+	///<param name ="color" type="THREE.Color">color</param>
+	///<returns type="Color">返回颜色对象</returns>
 	copyLinearToGamma: function ( color ) {
 
 		this.r = Math.sqrt( color.r );
 		this.g = Math.sqrt( color.g );
 		this.b = Math.sqrt( color.b );
 
-		return this;
+		return this;	//返回颜色对象。
 
 	},
 
+	/*convertGammaToLinear方法
+	///convertGammaToLinear方法对调用者自身的rgb值平方。
+	*/
+	///<summary>convertGammaToLinear</summary>
+	///<returns type="Color">返回颜色对象</returns>
 	convertGammaToLinear: function () {
 
 		var r = this.r, g = this.g, b = this.b;
@@ -464,6 +521,12 @@ THREE.Color.prototype = {
 
 	},
 
+	/*convertGammaToLinear方法
+	///convertGammaToLinear方法对调用者自身的rgb值开方。
+	*/
+	///<summary>convertGammaToLinear</summary>
+	///<returns type="Color">返回颜色对象</returns>
+	///
 	convertLinearToGamma: function () {
 
 		this.r = Math.sqrt( this.r );
@@ -474,60 +537,90 @@ THREE.Color.prototype = {
 
 	},
 
+	/*getHex方法
+	///getHex方法用于获得16进制颜色值并返回16进制int型颜色值
+	///更多关于hex颜色的内容参考维基百科,http://zh.wikipedia.org/wiki/%E7%BD%91%E9%A1%B5%E9%A2%9C%E8%89%B2
+	*/
+	///<summary>getHex</summary>
+	///<returns type="number">返回16进制数值</returns>
 	getHex: function () {
 
 		return ( this.r * 255 ) << 16 ^ ( this.g * 255 ) << 8 ^ ( this.b * 255 ) << 0;
 
 	},
 
+	/*getHexString方法
+	///getHexString方法用于获得16进制颜色值并返回string型颜色值
+	///更多关于hex颜色的内容参考维基百科,http://zh.wikipedia.org/wiki/%E7%BD%91%E9%A1%B5%E9%A2%9C%E8%89%B2
+	*/
+	///<summary>getHexString</summary>
+	///<returns type="number">返回string型颜色值</returns>
 	getHexString: function () {
 
 		return ( '000000' + this.getHex().toString( 16 ) ).slice( - 6 );
 
 	},
 
+	/*getHSL方法
+	///HSL颜色HSL和HSV都是一种将RGB色彩模型中的点在圆柱坐标系中的表示法。这两种表示法试图做到比RGB基于笛卡尔
+	///坐标系的几何结构更加直观.HSL即色相、饱和度、亮度（英语：Hue, Saturation, Lightness）
+	///
+	/// 色相（H）是色彩的基本属性，就是平常所说的颜色名称，如红色、绿色、蓝色等将360度的一个圆环平分成3分，0(360),120,240，取值范围是0-360，本库将区间设置为0.0-1.0。
+	/// 饱和度（S）是指色彩的纯度，越高色彩越纯，低则逐渐变灰，取0-100%的数值，输入时为0.0-1.0.
+	/// 明度（V），亮度（L），取0-100%，输入时为0.0-1.0.
+	///
+	///更多关于hsl颜色的内容参考维基百科, http://zh.wikipedia.org/wiki/HSL%E5%92%8CHSV%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4
+	///或者 http://zh.wikipedia.org/wiki/%E7%BD%91%E9%A1%B5%E9%A2%9C%E8%89%B2
+	///getHSL方法用于获得 hsl(360,1.0,0.5)颜色值并返回hsl(360,1.0,0.5)样式的int型颜色值
+	*/
+	///<summary>getHSL</summary>
+	///<param name ="optionalTarget" type="Object{ h: 0, s: 0, l: 0 }">可选的目标值</param>
+	///<returns name="hsl" type="Object{ h: 0, s: 0, l: 0 }">返回hsl(360,1.0,0.5)样式的int型颜色值</returns>
 	getHSL: function ( optionalTarget ) {
 
 		// h,s,l ranges are in 0.0 - 1.0
+		//h,s,l 取值范围是 0.0 - 1.0
 
+		//创建对象hsl，将可选参数optionalTarget赋值给hsl，如果没有可选参数optionalTarget，
+		//将hsl初始化为{ h: 0, s: 0, l: 0 };
 		var hsl = optionalTarget || { h: 0, s: 0, l: 0 };
 
-		var r = this.r, g = this.g, b = this.b;
+		var r = this.r, g = this.g, b = this.b; //创建变量r,g,b分别将color对象属性rgb复制给新建变量rgb
 
-		var max = Math.max( r, g, b );
-		var min = Math.min( r, g, b );
+		var max = Math.max( r, g, b );	//创建变量max并将rgb中最大值赋值给变量max
+		var min = Math.min( r, g, b );	//创建变量min并将rgb中最小值赋值给变量min
 
-		var hue, saturation;
-		var lightness = ( min + max ) / 2.0;
+		var hue, saturation;	//声明两个变量，hue，stturation
+		var lightness = ( min + max ) / 2.0;	//创建变量lightness，将min+max的一半赋值给lightness
 
-		if ( min === max ) {
-
-			hue = 0;
-			saturation = 0;
+		if ( min === max ) {	//如果最大值等于最小值 
+			//hue和saturation等于0.就是色相和饱和度等于0,当前颜色就是灰色.
+			hue = 0;	//色相
+			saturation = 0;	//饱和度
 
 		} else {
 
-			var delta = max - min;
+			var delta = max - min;	//创建变量delta = max-min
 
-			saturation = lightness <= 0.5 ? delta / ( max + min ) : delta / ( 2 - max - min );
+			saturation = lightness <= 0.5 ? delta / ( max + min ) : delta / ( 2 - max - min ); //根据亮度的大小做判断,得出饱和度.
 
 			switch ( max ) {
 
-				case r: hue = ( g - b ) / delta + ( g < b ? 6 : 0 ); break;
+				case r: hue = ( g - b ) / delta + ( g < b ? 6 : 0 ); break;		//根据最大值得出hue色相的值.
 				case g: hue = ( b - r ) / delta + 2; break;
 				case b: hue = ( r - g ) / delta + 4; break;
 
 			}
 
-			hue /= 6;
+			hue /= 6;	//得出数值除以6.
 
 		}
 
-		hsl.h = hue;
-		hsl.s = saturation;
-		hsl.l = lightness;
+		hsl.h = hue;			//设置hsl.h的值等于hue
+		hsl.s = saturation;		//设置hsl.s的值等于saturation
+		hsl.l = lightness;		//设置hsl.l的值等于lightness
 
-		return hsl;
+		return hsl; //返回hsl格式的颜色值.
 
 	},
 
