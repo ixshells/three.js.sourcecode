@@ -624,113 +624,213 @@ THREE.Color.prototype = {
 
 	},
 
+	/*getStyle方法
+	///getStyle方法用于获得一个rgb(255,0,0)	数值型的颜色值：
+	///		rgb(255,0,0)	数值型
+	///
+	///		TODO://在这里,是不是可以添加其他的几种样式呢?
+	///
+	///		rgb(100%,0%,0%)	百分比型
+	///		#ff0000 		6位16进制型
+	///		#f00 			3位16进制型
+	///		red 			颜色名
+	///		
+	///
+	///更多关于rgb颜色的内容参考维基百科,http://zh.wikipedia.org/wiki/%E4%B8%89%E5%8E%9F%E8%89%B2%E5%85%89%E6%A8%A1%E5%BC%8F
+	///或 http://zh.wikipedia.org/wiki/%E7%BD%91%E9%A1%B5%E9%A2%9C%E8%89%B2
+	*/
+	///<summary>getStyle</summary>
+	///<returns type="String">返回String类型的rgb(255,0,0)	数值型颜色值</returns>
 	getStyle: function () {
 
+		//这里因为THREE.JS的取值范围是0.0 -1.0,所以乘以255,返回给我们习惯的rgb(255,0,0)	数值型的颜色值.
 		return 'rgb(' + ( ( this.r * 255 ) | 0 ) + ',' + ( ( this.g * 255 ) | 0 ) + ',' + ( ( this.b * 255 ) | 0 ) + ')';
 
 	},
 
+
+	/****************************************
+	****下面函数用于对颜色的计算.
+	****************************************/
+
+	/*offsetHSL方法
+	///offsetHSL方法将当前颜色按照传递的参数(h,s,l)对颜色值进行偏移.
+	*/
+	///<summary>offsetHSL</summary>
+	///<param name ="h" type="number(0.0-1.0）">hue(0.0-1.0)色相</param>
+	///<param name ="s" type="number(0.0-1.0）">saturation(0.0-1.0)饱和度</param>
+	///<param name ="l" type="number(0.0-1.0）">lightness(0.0-1.0)亮度</param>
+	///<returns type="Color">返回颜色对象</returns>	
 	offsetHSL: function ( h, s, l ) {
 
-		var hsl = this.getHSL();
+		var hsl = this.getHSL();	//获得当前对象的颜色值赋值给对象hsl
 
-		hsl.h += h; hsl.s += s; hsl.l += l;
+		hsl.h += h; hsl.s += s; hsl.l += l;		//对hsl中的属性分别进行赋值.
 
-		this.setHSL( hsl.h, hsl.s, hsl.l );
+		this.setHSL( hsl.h, hsl.s, hsl.l );		//将最新的数值赋值给当前颜色对象.
 
-		return this;
+		return this;		//返回颜色对象
 
 	},
 
+	/*add方法
+	///add方法将当前颜色与传递参数(color)进行相加,返回颜色对象.
+	*/
+	///<summary>add</summary>
+	///<param name ="color" type="THREE.Color">颜色值{r:"",g:"",b:""}</param>
+	///<returns type="Color">返回颜色对象</returns>	
 	add: function ( color ) {
 
-		this.r += color.r;
+		this.r += color.r;	
 		this.g += color.g;
 		this.b += color.b;
 
-		return this;
+		return this;	//返回颜色对象
 
 	},
 
+	/*addColors方法
+	///addColors方法将传递参数(color1,color2)进行相加然后赋值给当前颜色,返回颜色对象.
+	*/
+	///<summary>addColors</summary>
+	///<param name ="color1" type="THREE.Color">颜色值{r:"",g:"",b:""}</param>
+	///<param name ="color2" type="THREE.Color">颜色值{r:"",g:"",b:""}</param>
+	///<returns type="Color">返回颜色对象</returns>	
 	addColors: function ( color1, color2 ) {
 
 		this.r = color1.r + color2.r;
 		this.g = color1.g + color2.g;
 		this.b = color1.b + color2.b;
 
-		return this;
+		return this;	//返回颜色对象
 
 	},
 
+	/*addScalar方法
+	///addScalar方法将当前颜色的rgb值与传递参数(s)进行相加,返回颜色对象.
+	*/
+	///<summary>addScalar</summary>
+	///<param name ="s" type="number">标量,取值范围 0.0 - color.r[g][b] <= s <= 1.0 - color.r[g][b] </param>
+	///<returns type="Color">返回颜色对象</returns>	
 	addScalar: function ( s ) {
 
 		this.r += s;
 		this.g += s;
 		this.b += s;
 
-		return this;
+		return this;	//返回颜色对象
 
 	},
 
+	/*multiply方法
+	///multiply方法将当前颜色与传递参数(color)进行相乘,返回颜色对象.
+	*/
+	///<summary>multiply</summary>
+	///<param name ="color" type="THREE.Color">颜色值{r:"",g:"",b:""}</param>
+	///<returns type="Color">返回颜色对象</returns>	
 	multiply: function ( color ) {
 
 		this.r *= color.r;
 		this.g *= color.g;
 		this.b *= color.b;
 
-		return this;
+		return this;	//返回颜色对象
 
 	},
 
+	/*multiplyScalar方法
+	///multiplyScalar方法将当前颜色的rgb值与传递参数(s)进行相乘,返回颜色对象.
+	*/
+	///<summary>multiplyScalar</summary>
+	///<param name ="s" type="number">标量,取值范围 0.0 / color.r[g][b] <= s <= 1.0 / color.r[g][b] </param>
+	///<returns type="Color">返回颜色对象</returns>	
 	multiplyScalar: function ( s ) {
 
 		this.r *= s;
 		this.g *= s;
 		this.b *= s;
 
-		return this;
+		return this;	//返回颜色对象
 
 	},
 
+	/*lerp方法
+	///lerp方法将当前颜色this.r[g][b]设置为下限和上限参数color.r[g][b] 之间进行插值，
+	/// alpha 表示权值。从下限this.r[g][b]到上限color.r[g][b]乘以百分比alpha(0.0-1.0),加上当前颜色
+	///this.r[g][b] 的和设置给当前颜色对象,返回颜色对象.
+	///注意，如果 this.r[g][b] 和 color.r[g][b]是向量，则权值 alpha 必须是标量取值范围是0.0-1.0.
+	*/
+	///<summary>lerp</summary>
+	///<param name ="color" type="THREE.Color">颜色值{r:"",g:"",b:""}</param>
+	///<param name ="alpha" type="number">百分比权值(0.0-1.0)</param>
+	///<returns type="Color">返回颜色对象</returns>	
 	lerp: function ( color, alpha ) {
 
-		this.r += ( color.r - this.r ) * alpha;
-		this.g += ( color.g - this.g ) * alpha;
-		this.b += ( color.b - this.b ) * alpha;
+		this.r += ( color.r - this.r ) * alpha; 	//从下限this.r到上限color.r乘以百分比alpha(0.0-1.0),加上当前颜色this.r的和设置给当前颜色对象
+		this.g += ( color.g - this.g ) * alpha;		//从下限this.g到上限color.g乘以百分比alpha(0.0-1.0),加上当前颜色this.g的和设置给当前颜色对象
+		this.b += ( color.b - this.b ) * alpha;		//从下限this.b到上限color.b乘以百分比alpha(0.0-1.0),加上当前颜色this.b的和设置给当前颜色对象
 
-		return this;
+		return this;	//返回颜色对象
 
 	},
 
+	/*equals方法
+	///equals方法相当于比较运算符===,将当前颜色和参数c中的rgb值进行对比,返回bool型值.
+	*/
+	///<summary>equals</summary>
+	///<param name ="c" type="THREE.Color">颜色值{r:"",g:"",b:""}</param>
+	///<returns type="bool">返回true or false</returns>	
 	equals: function ( c ) {
 
-		return ( c.r === this.r ) && ( c.g === this.g ) && ( c.b === this.b );
+		return ( c.r === this.r ) && ( c.g === this.g ) && ( c.b === this.b );	//将当前颜色和参数c中的rgb值进行对比,返回bool型值.
 
 	},
 
+	/*fromArray方法
+	///fromArray方法将存储颜色值的数组赋值给当前颜色对象
+	*/
+	///<summary>fromArray</summary>
+	///<param name ="array" type="Array">颜色值数组array[0.5,0.5,0.5]</param>
+	///<returns type="Color">返回颜色对象</returns>	
 	fromArray: function ( array ) {
 
 		this.r = array[ 0 ];
 		this.g = array[ 1 ];
 		this.b = array[ 2 ];
 
-		return this;
+		return this;	//返回颜色对象
 
 	},
 
+	/*toArray方法
+	///toArray方法将当前颜色对象的属性赋值给数组array[0.5,0.5,0.5].返回一个数组对象.
+	*/
+	///<summary>toArray</summary>
+	///<returns type="Array">颜色值数组array[0.5,0.5,0.5]</returns>	
 	toArray: function () {
 
-		return [ this.r, this.g, this.b ];
+		return [ this.r, this.g, this.b ];	//颜色值数组array[0.5,0.5,0.5]
 
 	},
 
+	/*clone方法
+	///clone方法克隆一个颜色对象.
+	*/
+	///<summary>clone</summary>
+	///<returns type="THREE.Color">返回颜色对象</returns>	
 	clone: function () {
 
-		return new THREE.Color().setRGB( this.r, this.g, this.b );
+		return new THREE.Color().setRGB( this.r, this.g, this.b );	//返回颜色对象
 
 	}
 
 };
+
+
+/*ColorKeywords对象
+///ColorKeywords对象将存储常用的颜色名和其对应的16进制颜色值.
+///供用户直接使用.
+*/
 THREE.ColorKeywords = { 
 		'aliceblue': 0xF0F8FF,
 		 'antiquewhite': 0xFAEBD7,
