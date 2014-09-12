@@ -755,7 +755,7 @@ THREE.Color.prototype = {
 	},
 
 	/*lerp方法
-	///lerp方法将当前颜色this.r[g][b]设置为下限和上限参数color.r[g][b] 之间进行插值，
+	///lerp方法将当前颜色this.r[g][b]设置为下限和上限参数color.r[g][b] 之间进行线性插值，
 	/// alpha 表示权值。从下限this.r[g][b]到上限color.r[g][b]乘以百分比alpha(0.0-1.0),加上当前颜色
 	///this.r[g][b] 的和设置给当前颜色对象,返回颜色对象.
 	///注意，如果 this.r[g][b] 和 color.r[g][b]是向量，则权值 alpha 必须是标量取值范围是0.0-1.0.
@@ -1798,14 +1798,14 @@ THREE.Vector2.prototype = {
 	///		1. 参数scalar如果为0,当前对象(x,y)值直接设置为0!!
 	///		2. 这里与divide()方法不同的是,这里传递的参数scalar是一个标量,而divide()方法的参数v是一个二维向量.
 	*/
-	///<summary>multiplyScalar</summary>
-	///<param name ="s" type="number">与当前对象(x,y)值相除的标量,数值</param>
+	///<summary>divideScalar</summary>
+	///<param name ="scalar" type="number">与当前对象(x,y)值相除的标量,数值</param>
 	///<returns type="Vector2">返回新坐标值的二维向量</returns>
 	divideScalar: function ( scalar ) {
 
 		if ( scalar !== 0 ) {
 
-			var invScalar = 1 / scalar;
+			var invScalar = 1 / scalar;		//将被除数换算成小数
 
 			this.x *= invScalar;
 			this.y *= invScalar;
@@ -1821,18 +1821,24 @@ THREE.Vector2.prototype = {
 		return this;	//返回新坐标值的二维向量
 
 	},
-
+	/*
+	///min方法用来将二维向量的(x,y)坐标值直接与参数v的(x,y)比较,如果当前二维向量的值大于参数v的(x,y),
+	///将参数v的(x,y)赋值给当前向量,并返回(x,y)值最小的二维向量.
+	*/
+	///<summary>min</summary>
+	///<param name ="v" type="Vector2">与当前对象(x,y)值参数v的(x,y)比较,并返回(x,y)值最小的二维向量.</param>
+	///<returns type="Vector2">返回新坐标值的二维向量</returns>
 	min: function ( v ) {
 
-		if ( this.x > v.x ) {
+		if ( this.x > v.x ) {		//如果当前二维向量的x值大于参数v.x
 
-			this.x = v.x;
+			this.x = v.x;			//将参数v的x值赋值给当前向量
 
 		}
 
-		if ( this.y > v.y ) {
+		if ( this.y > v.y ) {		//如果当前二维向量的y值大于参数v.y
 
-			this.y = v.y;
+			this.y = v.y;			//将参数v的y值赋值给当前向量
 
 		}
 
@@ -1840,56 +1846,83 @@ THREE.Vector2.prototype = {
 
 	},
 
+	/*
+	///max方法用来将二维向量的(x,y)坐标值直接与参数v的(x,y)比较,如果当前二维向量的值小于参数v的(x,y),
+	///将参数v的(x,y)赋值给当前向量,并返回(x,y)值最大的二维向量.
+	*/
+	///<summary>min</summary>
+	///<param name ="v" type="Vector2">与当前对象(x,y)值参数v的(x,y)比较,并返回(x,y)值最大的二维向量.</param>
+	///<returns type="Vector2">返回新坐标值的二维向量</returns>
 	max: function ( v ) {
 
-		if ( this.x < v.x ) {
+		if ( this.x < v.x ) {		//如果当前二维向量的x值小于参数v.x
 
-			this.x = v.x;
+			this.x = v.x;			//将参数v的x值赋值给当前向量
 
 		}
 
-		if ( this.y < v.y ) {
+		if ( this.y < v.y ) {		//如果当前二维向量的y值小于参数v.y
 
-			this.y = v.y;
+			this.y = v.y;			//将参数v的y值赋值给当前向量
 
 		}
 
 		return this;	//返回新坐标值的二维向量
 
 	},
-
+	/*
+	///clamp方法用来将二维向量的(x,y)坐标值直接与参数min,参数max的(x,y)比较,如果当前二维向量的值小于参数min的(x,y)
+	///或者大于参数max的(x,y),对应的将参数min或max的(x,y)赋值给当前二维向量,
+	/// NOTE:保持当前二维向量在min,max所组成的二维空间的之内,最大不超过max的(x,y)值,最小不小于min的(x,y)值.
+	*/
+	///<summary>clamp</summary>
+	///<param name ="min" type="Vector2">二维向量.</param>
+	///<param name ="max" type="Vector2">二维向量.</param>
+	///<returns type="Vector2">返回指定界限内的二维向量</returns>
 	clamp: function ( min, max ) {
 
 		// This function assumes min < max, if this assumption isn't true it will not operate correctly
+		// 这个方法用来获得二维向量的最小值于最大值,如果没有获取到,说明函数运行错误.
 
-		if ( this.x < min.x ) {
 
-			this.x = min.x;
+		if ( this.x < min.x ) {				//如果当前二维向量的x值小于参数min的x值
 
-		} else if ( this.x > max.x ) {
+			this.x = min.x;					//将参数min的x值赋值给当前向量
 
-			this.x = max.x;
+		} else if ( this.x > max.x ) {		//如果当前二维向量的x值大于参数max的x值
 
-		}
-
-		if ( this.y < min.y ) {
-
-			this.y = min.y;
-
-		} else if ( this.y > max.y ) {
-
-			this.y = max.y;
+			this.x = max.x;					//将参数max的x值赋值给当前向量
 
 		}
 
-		return this;	//返回新坐标值的二维向量
+		if ( this.y < min.y ) {				//如果当前二维向量的y值小于参数min的x值
+
+			this.y = min.y;					//将参数min的y值赋值给当前向量
+
+		} else if ( this.y > max.y ) {		//如果当前二维向量的y值小于参数max的y值
+
+			this.y = max.y;					//将参数max的y值赋值给当前向量
+
+		}
+
+		return this;	//返回指定界限内的二维向量
 	},
-
-	clampScalar: ( function () {
+	/*
+	///clampScalar方法用来将二维向量的(x,y)坐标值直接与参数minVal,参数maxVal比较,如果当前二维向量的值小于参数minVal
+	///或者大于参数maxVal,将参数minVal或maxVal赋值给当前二维向量,
+	/// NOTE:
+	///		1. 保持当前二维向量在minVal,maxVal所组成的二维空间的之内,最大不超过maxVal值,最小不小于minVal值.
+	///		2. 这里与clamp()方法不同的是,这里传递的参数minVal,maxVal是一个标量,而clamp()方法的参数min,参数max是两个二维向量.
+	*/
+	///<summary>clampScalar</summary>
+	///<param name ="minVal" type="number">下限.</param>
+	///<param name ="maxVal" type="number">上限.</param>
+	///<returns type="Vector2">返回指定界限内的二维向量</returns>
+	clampScalar: ( function () {	//外侧括号是一种特殊的用法,似乎代表立即执行.小白,请见谅!
 
 		var min, max;
 
-		return function ( minVal, maxVal ) {
+		return function ( minVal, maxVal ) {	//创建匿名函数
 
 			if ( min === undefined ) {
 
@@ -1901,39 +1934,63 @@ THREE.Vector2.prototype = {
 			min.set( minVal, minVal );
 			max.set( maxVal, maxVal );
 
-			return this.clamp( min, max );
+			return this.clamp( min, max );	//调用clamp()方法,返回指定界限内的二维向量
 
 		};
 
 	} )(),
 
+	/*
+	///floor方法用来返回小于或等于二维向量的(x,y)坐标值的最大整数
+	/// NOTE:去掉小数部分
+	*/
+	///<summary>floor</summary>
+	///<returns type="Vector2">返回圆整后的二维向量</returns>
 	floor: function () {
 
 		this.x = Math.floor( this.x );
 		this.y = Math.floor( this.y );
 
-		return this;	//返回新坐标值的二维向量
+		return this;	//返回圆整后的二维向量
 
 	},
 
+	/*
+	///ceil方法用来返回大于或等于二维向量的(x,y)坐标值的最小整数
+	/// NOTE:将小数部分去掉加1.
+	*/
+	///<summary>ceil</summary>
+	///<returns type="Vector2">返回圆整后的二维向量</returns>
 	ceil: function () {
 
 		this.x = Math.ceil( this.x );
 		this.y = Math.ceil( this.y );
 
-		return this;	//返回新坐标值的二维向量
+		return this;	//返回圆整后的二维向量
 
 	},
 
+	/*
+	///round方法用来返回最接近二维向量的(x,y)坐标值的整数
+	/// NOTE:也就是四舍五入
+	*/
+	///<summary>round</summary>
+	///<returns type="Vector2">返回圆整后的二维向量</returns>
 	round: function () {
 
 		this.x = Math.round( this.x );
 		this.y = Math.round( this.y );
 
-		return this;	//返回新坐标值的二维向量
+		return this;	//返回圆整后的二维向量
 
 	},
 
+	/*
+	///roundToZero方法将当前二维向量的(x,y)坐标值若为负数时,返回大于或等于二维向量的(x,y)坐标值的最小整数
+	///	而当前二维向量的(x,y)坐标值若为正数时,返回小于或等于二维向量的(x,y)坐标值的最大整数
+	*/
+	///<summary>roundToZero</summary>
+	///<returns type="Vector2">返回圆整后的二维向量</returns>
 	roundToZero: function () {
 
 		this.x = ( this.x < 0 ) ? Math.ceil( this.x ) : Math.floor( this.x );
@@ -1943,6 +2000,13 @@ THREE.Vector2.prototype = {
 
 	},
 
+	/*
+	///negate方法将当前二维向量的(x,y)坐标值若为负数时,返回正数.
+	///	而当前二维向量的(x,y)坐标值若为正数时,返回负数.
+	/// NOTE:取当前二维向量的(x,y)坐标值相反数
+	*/
+	///<summary>negate</summary>
+	///<returns type="Vector2">返回取相反数后的二维向量</returns>
 	negate: function () {
 
 		this.x = - this.x;
@@ -1952,89 +2016,167 @@ THREE.Vector2.prototype = {
 
 	},
 
+	/*
+	///dot方法将返回两个向量的点乘积(点乘,数量积).
+	/// NOTE:关于点积的介绍参考维基百科:http://zh.wikipedia.org/wiki/%E6%95%B0%E9%87%8F%E7%A7%AF
+	*/
+	///<summary>dot</summary>
+	///<param name ="v" type="Vector2">二维向量</param>
+	///<returns type="number">返回点乘积(点乘,数量积)</returns>
 	dot: function ( v ) {
 
 		return this.x * v.x + this.y * v.y;
 
 	},
 
+	/*
+	///lengthSq方法将返回这个向量的长度的平方（只读）.
+	/// NOTE：勾股定理a^2 + b^2 = c^2,这里返回的是c^2.
+	*/
+	///<summary>lengthSq</summary>
+	///<returns type="number">返回向量的长度的平方（只读）</returns>
 	lengthSq: function () {
 
-		return this.x * this.x + this.y * this.y;
+		return this.x * this.x + this.y * this.y;	//返回向量的长度的平方（只读）
 
 	},
 
+	/*
+	///length方法将返回向量的长度（只读）.
+	/// NOTE：勾股定理a^2 + b^2 = c^2,c=Math.sqrt(a^2 + b^2),这里返回的是c.
+	*/
+	///<summary>length</summary>
+	///<returns type="number">返回向量的长度（只读）</returns>
 	length: function () {
 
-		return Math.sqrt( this.x * this.x + this.y * this.y );
+		return Math.sqrt( this.x * this.x + this.y * this.y );	//返回向量的长度（只读）
 
 	},
 
+	/*
+	///normalize方法将返回向量的长度为1（只读）.
+	/// 复习一下初中的几何吧,三角恒等式,给你准备好了 :) ,见维基百科:
+	/// http://zh.wikipedia.org/wiki/%E4%B8%89%E8%A7%92%E5%87%BD%E6%95%B0#.E4.B8.89.E8.A7.92.E6.81.92.E7.AD.89.E5.BC.8F
+	*/
+	///<summary>normalize</summary>
+	///<returns type="number">返回向量的长度为1（只读）</returns>
 	normalize: function () {
 
-		return this.divideScalar( this.length() );
+		return this.divideScalar( this.length() );		//返回向量的长度为1（只读）
 
 	},
 
+	/*
+	///distanceTo方法将返回当前二维向量到参数v的距离(只读).
+	*/
+	///<summary>distanceTo</summary>
+	///<param name ="v" type="Vector2">二维向量</param>
+	///<returns type="Vector2">返回当前二维向量到参数v的距离(只读).</returns>
 	distanceTo: function ( v ) {
 
-		return Math.sqrt( this.distanceToSquared( v ) );
+		return Math.sqrt( this.distanceToSquared( v ) );	//返回当前二维向量到参数v的距离(只读).
 
 	},
 
+	/*
+	///distanceToSquared方法将返回当前二维向量到参数v的距离的点积(点乘,数量积)(只读).
+	/// NOTE:关于点积的介绍参考维基百科:http://zh.wikipedia.org/wiki/%E6%95%B0%E9%87%8F%E7%A7%AF
+	*/
+	///<summary>distanceToSquared</summary>
+	///<param name ="v" type="Vector2">二维向量</param>
+	///<returns type="Vector2">返回当前二维向量到参数v的距离的点积(点乘,数量积)(只读)</returns>
 	distanceToSquared: function ( v ) {
 
 		var dx = this.x - v.x, dy = this.y - v.y;
-		return dx * dx + dy * dy;
+		return dx * dx + dy * dy;					//当前二维向量到参数v的距离的点积(点乘,数量积)(只读).
 
 	},
 
+	/*
+	///setLength方法用来按照参数l(长度)设置新的二维向量(x,y)值.
+	/// NOTE:将以原点到当前向量的线段等比例缩放到参数l所指定的长度.
+	*/
+	///<summary>setLength</summary>
+	///<param name ="l" type="number">指定的长度</param>
+	///<returns type="Vector2">返回按照参数l(长度)设置新的二维向量(x,y)值.</returns>
 	setLength: function ( l ) {
 
 		var oldLength = this.length();
 
-		if ( oldLength !== 0 && l !== oldLength ) {
+		if ( oldLength !== 0 && l !== oldLength ) {		//做个判断,如果原长度与新长度不相等,并且原长度不为0.
 
-			this.multiplyScalar( l / oldLength );
+			this.multiplyScalar( l / oldLength );		//调用.multiplyScalar()方法,传递新长度与原长度的比.
 		}
 
-		return this;
+		return this;		//返回按照参数l(长度)设置新的二维向量(x,y)值.
 
 	},
 
+	/*lerp方法
+	///lerp方法在将当前二维向量(x,y)设置为下限和参数v(x,y)设为上限 之间进行线性插值，
+	/// alpha 表示权值。从下限当前二维向量(x,y)到上限参数v(x,y)乘以百分比alpha(0.0-1.0),加上当前二维向量(x,y)
+	///当前二维向量(x,y)的和赋值给当前二维向量(x,y),返回当前二维向量(x,y).
+	/// NOTE:注意，如果 当前二维向量(x,y) 和 参数v(x,y)是向量，则权值 alpha 必须是标量,取值范围是0.0-1.0.
+	*/
+	///<summary>lerp</summary>
+	///<param name ="v" type="Vector2">二维向量</param>
+	///<param name ="alpha" type="number">百分比权值(0.0-1.0)</param>
+	///<returns type="Vector2">二维向量</returns>	
 	lerp: function ( v, alpha ) {
 
 		this.x += ( v.x - this.x ) * alpha;
 		this.y += ( v.y - this.y ) * alpha;
 
-		return this;
+		return this;	//返回二维向量
 
 	},
 
+	/*equals方法
+	///equals方法相当于比较运算符===,将当前二维向量和参数v中的(x,y)值进行对比,返回bool型值.
+	*/
+	///<summary>equals</summary>
+	///<param name ="v" type="Vector2">二维向量(x,y)</param>
+	///<returns type="bool">返回true or false</returns
 	equals: function ( v ) {
 
-		return ( ( v.x === this.x ) && ( v.y === this.y ) );
+		return ( ( v.x === this.x ) && ( v.y === this.y ) );	//返回true or false
 
 	},
 
+	/*fromArray方法
+	///fromArray方法将存储二维向量(x,y)值的数组赋值给当前二维向量对象
+	*/
+	///<summary>fromArray</summary>
+	///<param name ="array" type="Array">二维向量(x,y)值数组array[x,y]</param>
+	///<returns type="Vector2">返回新的二维向量</returns>	
 	fromArray: function ( array ) {
 
 		this.x = array[ 0 ];
 		this.y = array[ 1 ];
 
-		return this;
+		return this;	//返回新的二维向量
 
 	},
 
+	/*toArray方法
+	///toArray方法将当前二维向量对象的属性赋值给数组array[0.5,0.5].返回一个数组对象.
+	*/
+	///<summary>toArray</summary>
+	///<returns type="Array">二维向量(x,y)值数组array[x,y]</returns>	
 	toArray: function () {
 
-		return [ this.x, this.y ];
+		return [ this.x, this.y ];	//二维向量(x,y)值数组array[x,y]
 
 	},
 
+	/*clone方法
+	///clone方法克隆一个二维向量对象.
+	*/
+	///<summary>clone</summary>
+	///<returns type="Vector2">返回二维向量对象</returns>	
 	clone: function () {
 
-		return new THREE.Vector2( this.x, this.y );
+		return new THREE.Vector2( this.x, this.y );		//返回二维向量
 
 	}
 
