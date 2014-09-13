@@ -1549,7 +1549,7 @@ THREE.Vector2 = function ( x, y ) {
 
 THREE.Vector2.prototype = {
 
-	constructor: THREE.Vector2,
+	constructor: THREE.Vector2,	//构造器
 
 	/*
 	///set方法用来从新设置二维向量的x,y坐标值.并返回新的坐标值的二维向量.
@@ -1674,7 +1674,8 @@ THREE.Vector2.prototype = {
 	},
 
 	/*
-	///addVectors方法用来将二维向量的(x,y)坐标值分别于参数(a,b)的(x,y)相加.并返回新的坐标值的二维向量.
+	///addVectors方法用来将二维向量的(x,y)坐标值等于参数(a,b)的(x,y)相加.并返回新的坐标值的二维向量.
+	/// NOTE:两个矢量组件对应相加。
 	*/
 	///<summary>addVectors</summary>
 	///<param name ="a" type="Vector2">二维向量</param>
@@ -2193,6 +2194,18 @@ THREE.Vector2.prototype = {
  * @author WestLangley / http://github.com/WestLangley
  */
 
+/*
+///Vector3对象的构造函数.用来创建一个三维向量的对象.Vector3对象的功能函数采用
+///定义构造的函数原型对象来实现.
+///
+///	用法: var p2d = new Vector3(5,3,2)
+///	创建一个x坐标为5,y坐标为3的向量,z坐标为2的向量.
+///	NOTE: 参数(x,y,z)坐标为可选参数,如果不指定参数(x,y,z),将创建一个坐标为(0,0,0)的向量.
+*/
+///<summary>Vector3</summary>
+///<param name ="x" type="number">x坐标</param>
+///<param name ="y" type="number">y坐标</param>
+///<param name ="z" type="number">z坐标</param>
 THREE.Vector3 = function ( x, y, z ) {
 
 	this.x = x || 0;
@@ -2201,44 +2214,82 @@ THREE.Vector3 = function ( x, y, z ) {
 
 };
 
+/****************************************
+****下面是Vector3对象提供的功能函数.
+****************************************/
+
 THREE.Vector3.prototype = {
 
-	constructor: THREE.Vector3,
+	constructor: THREE.Vector3,	//构造器
 
+	/*
+	///set方法用来从新设置三维向量的x,y,z坐标值.并返回新的坐标值的三维向量.
+	*/
+	///<summary>set</summary>
+	///<param name ="x" type="number">x坐标</param>
+	///<param name ="y" type="number">y坐标</param>
+	///<param name ="z" type="number">y坐标</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	set: function ( x, y, z ) {
 
 		this.x = x;
 		this.y = y;
 		this.z = z;
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
+	/*
+	///setX方法用来从新设置三维向量的x坐标值.并返回新的坐标值的三维向量.
+	*/
+	///<summary>setX</summary>
+	///<param name ="x" type="number">x坐标</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	setX: function ( x ) {
 
 		this.x = x;
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
+	/*
+	///setY方法用来从新设置三维向量的y坐标值.并返回新的坐标值的三维向量.
+	*/
+	///<summary>setY</summary>
+	///<param name ="y" type="number">y坐标</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	setY: function ( y ) {
 
 		this.y = y;
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
+	/*
+	///setZ方法用来从新设置三维向量的z坐标值.并返回新的坐标值的三维向量.
+	*/
+	///<summary>setZ</summary>
+	///<param name ="z" type="number">z坐标</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	setZ: function ( z ) {
 
 		this.z = z;
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
+	/*
+	///setComponent方法用来从新设置三维向量的(x,y)坐标值.并返回新的坐标值的三维向量.
+	///参数index取值为0,1 或者 2,取值为0,参数value设置x的坐标值,取值为1,参数value设置y的坐标,
+	///取值为2,参数value设置z的坐标.
+	*/
+	///<summary>setComponent</summary>
+	///<param name ="index" type="number">0,1或2</param>
+	///<param name ="value" type="number">x, y 或 z坐标</param>
 	setComponent: function ( index, value ) {
 
 		switch ( index ) {
@@ -2252,6 +2303,13 @@ THREE.Vector3.prototype = {
 
 	},
 
+	/*
+	///getComponent方法用获得三维向量的(x,y,z)坐标值.
+	///参数index取值为0,1 或者 2,取值为0,获得x的坐标值,取值为1,获得y的坐标,
+	///取值为2,获得z的坐标.
+	*/
+	///<summary>setComponent</summary>
+	///<param name ="index" type="number">0,1或2</param>
 	getComponent: function ( index ) {
 
 		switch ( index ) {
@@ -2265,20 +2323,35 @@ THREE.Vector3.prototype = {
 
 	},
 
+	/*
+	///copy方法用来复制三维向量的(x,y,z)坐标值.并返回新的坐标值的三维向量.
+	*/
+	///<summary>copy</summary>
+	///<param name ="v" type="Vector3">三维向量</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	copy: function ( v ) {
 
 		this.x = v.x;
 		this.y = v.y;
 		this.z = v.z;
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
+	/*
+	///add方法用来将三维向量的(x,y,z)坐标值与参数v的(x,y,z)相加.并返回新的坐标值的三维向量.
+	/// NOTE:add()方法虽然有两个参数,但实际上只对参数v做运算,这里的参数w,如果设置的话,调用.addVectors()方法.
+	*/
+	///<summary>add</summary>
+	///<param name ="v" type="Vector3">与当前对象(x,y,z)坐标值增加的向量</param>
+	///<param name ="w" type="Vector3">判断是否有第二个参数w,如果有的话,调用.addVectors()方法</param>
+	///<returns type="Vector2">返回新坐标值的二维向量</returns>
 	add: function ( v, w ) {
 
-		if ( w !== undefined ) {
+		if ( w !== undefined ) {	//判断是否有第二个参数w,如果有的话,调用.addVectors()方法.
 
+			//THREE.Vector3: .add()方法现在只有一个参数,如果2个参数使用.addVectors( a, b )方法来替代.
 			console.warn( 'THREE.Vector3: .add() now only accepts one argument. Use .addVectors( a, b ) instead.' );
 			return this.addVectors( v, w );
 
@@ -2288,34 +2361,58 @@ THREE.Vector3.prototype = {
 		this.y += v.y;
 		this.z += v.z;
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
+	/*
+	///addScalar方法用来将三维向量的(x,y,z)坐标值直接与参数s相加.并返回新的坐标值的三维向量.
+	/// NOTE:这里与add()方法不同的是,这里传递的参数s是一个标量,而add()方法的参数v是一个三维向量.
+	*/
+	///<summary>addScalar</summary>
+	///<param name ="s" type="number">(x,y,z)要增加的数值</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	addScalar: function ( s ) {
 
 		this.x += s;
 		this.y += s;
 		this.z += s;
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
+	/*
+	///addVectors方法用来将三维向量的(x,y,z)坐标值等于参数(a,b)的(x,y,z)相加.并返回新的坐标值的三维向量.
+	/// NOTE:两个矢量组件对应相加。
+	*/
+	///<summary>addVectors</summary>
+	///<param name ="a" type="Vector3">三维向量</param>
+	///<param name ="b" type="Vector3">三维向量</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	addVectors: function ( a, b ) {
 
 		this.x = a.x + b.x;
 		this.y = a.y + b.y;
 		this.z = a.z + b.z;
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
+	/*
+	///sub方法用来将三维向量的(x,y,z)坐标值与参数v的(x,y,z)相减.并返回新的坐标值的三维向量.
+	/// NOTE:sub()方法虽然有两个参数,但实际上只对参数v做运算,这里的参数w,如果设置的话,调用.subVectors()方法.
+	*/
+	///<summary>sub</summary>
+	///<param name ="v" type="Vector3">与当前对象(x,y,z)坐标值增加的三维向量</param>
+	///<param name ="w" type="Vector3">判断是否有第二个参数w,如果有的话,调用.subVectors()方法</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	sub: function ( v, w ) {
 
-		if ( w !== undefined ) {
+		if ( w !== undefined ) {	//判断是否有第二个参数w,如果有的话,调用.subVectors()方法.
 
+			//THREE.Vector3: .sub()方法现在只有一个参数,如果2个参数使用.subVectors( a, b )方法来替代.
 			console.warn( 'THREE.Vector3: .sub() now only accepts one argument. Use .subVectors( a, b ) instead.' );
 			return this.subVectors( v, w );
 
@@ -2325,24 +2422,39 @@ THREE.Vector3.prototype = {
 		this.y -= v.y;
 		this.z -= v.z;
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
+	/*
+	///subVectors方法用来将三维向量的(x,y,z)坐标值分别于参数(a,b)的(x,y,z)相减.并返回新的坐标值的三维向量.
+	*/
+	///<summary>subVectors</summary>
+	///<param name ="a" type="Vector3">三维向量</param>
+	///<param name ="b" type="Vector3">三维向量</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	subVectors: function ( a, b ) {
 
 		this.x = a.x - b.x;
 		this.y = a.y - b.y;
 		this.z = a.z - b.z;
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
+	/*
+	///multiply方法用来将三维向量的(x,y,z)坐标值与参数v的(x,y,z)相乘.并返回新的坐标值的三维向量.
+	*/
+	///<summary>multiply</summary>
+	///<param name ="v" type="Vector3">与当前对象(x,y,z)值相乘的三维向量</param>
+	///<param name ="w" type="Vector3">判断是否有第二个参数w,如果有的话,调用.multiplyVectors()方法</param>
+	///<returns type="Vector2">返回新坐标值的三维向量</returns>
 	multiply: function ( v, w ) {
 
 		if ( w !== undefined ) {
 
+			//THREE.Vector3: .multiply()方法现在只有一个参数,如果2个参数使用.multiplyVectors( a, b )方法来替代.
 			console.warn( 'THREE.Vector3: .multiply() now only accepts one argument. Use .multiplyVectors( a, b ) instead.' );
 			return this.multiplyVectors( v, w );
 
@@ -2352,27 +2464,42 @@ THREE.Vector3.prototype = {
 		this.y *= v.y;
 		this.z *= v.z;
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
+	/*
+	///multiplyScalar方法用来将三维向量的(x,y,z)坐标值直接与参数s相乘.并返回新的坐标值的三维向量.
+	/// NOTE:这里与multiply()方法不同的是,这里传递的参数scalar是一个标量,而multiply()方法的参数v是一个三维向量.
+	*/
+	///<summary>multiplyScalar</summary>
+	///<param name ="scalar" type="number">与当前对象(x,y,z)值相乘的标量,数值</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	multiplyScalar: function ( scalar ) {
 
 		this.x *= scalar;
 		this.y *= scalar;
 		this.z *= scalar;
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
+	/*
+	///multiplyVectors方法用来将三维向量的(x,y,z)坐标值等于参数(a,b)的(x,y,z)相乘.并返回新的坐标值的三维向量.
+	/// NOTE:两个矢量组件对应相乘。
+	*/
+	///<summary>multiplyVectors</summary>
+	///<param name ="a" type="Vector3">三维向量</param>
+	///<param name ="b" type="Vector3">三维向量</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	multiplyVectors: function ( a, b ) {
 
 		this.x = a.x * b.x;
 		this.y = a.y * b.y;
 		this.z = a.z * b.z;
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
@@ -2510,21 +2637,36 @@ THREE.Vector3.prototype = {
 
 	},
 
+	/*
+	///divide方法用来将三维向量的(x,y,z)坐标值与参数v的(x,y,z)相除.并返回新的坐标值的三维向量.
+	*/
+	///<summary>divide</summary>
+	///<param name ="v" type="Vector3">与当前对象(x,y,z)值相除的三维向量</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	divide: function ( v ) {
 
 		this.x /= v.x;
 		this.y /= v.y;
 		this.z /= v.z;
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
+	/*
+	///divideScalar方法用来将三维向量的(x,y,z)坐标值直接与参数scalar相除.并返回新的坐标值的三维向量.
+	/// NOTE:
+	///		1. 参数scalar如果为0,当前对象(x,y,z)值直接设置为0!!
+	///		2. 这里与divide()方法不同的是,这里传递的参数scalar是一个标量,而divide()方法的参数v是一个三维向量.
+	*/
+	///<summary>divideScalar</summary>
+	///<param name ="scalar" type="number">与当前对象(x,y,z)值相除的标量,数值</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	divideScalar: function ( scalar ) {
 
 		if ( scalar !== 0 ) {
 
-			var invScalar = 1 / scalar;
+			var invScalar = 1 / scalar;		//将被除数换算成小数
 
 			this.x *= invScalar;
 			this.y *= invScalar;
@@ -2532,13 +2674,14 @@ THREE.Vector3.prototype = {
 
 		} else {
 
+			//参数scalar如果为0,当前对象(x,y,z)值直接设置为0!!
 			this.x = 0;
 			this.y = 0;
 			this.z = 0;
 
 		}
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
