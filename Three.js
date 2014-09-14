@@ -628,7 +628,7 @@ THREE.Color.prototype = {
 	///getStyle方法用于获得一个rgb(255,0,0)	数值型的颜色值：
 	///		rgb(255,0,0)	数值型
 	///
-	///	TODO://在这里,是不是可以添加其他的几种样式呢?
+	///TODO:在这里,是不是可以添加其他的几种样式呢?
 	///
 	///		rgb(100%,0%,0%)	百分比型
 	///		#ff0000 		6位16进制型
@@ -2943,38 +2943,73 @@ THREE.Vector3.prototype = {
 
 	},
 
+	/*
+	///lengthManhattan方法将返回三维向量(x,y,z)值的和（只读）.
+	///曼哈顿距离——两点在南北方向上的距离加上在东西方向上的距离，即d（i，j）=|xi-xj|+|yi-yj|。对于一个具有
+	///正南正北、正东正西方向规则布局的城镇街道，从一点到达另一点的距离正是在南北方向上旅行的距离加上在东西方向
+	///上旅行的距离，因此曼哈顿距离又称为出租车距离，曼哈顿距离不是距离不变量，当坐标轴变动时，点间的距离就会不同。
+	///维基百科上的内容:http://zh.wikipedia.org/zh/%E6%9B%BC%E5%93%88%E9%A0%93%E8%B7%9D%E9%9B%A2
+	/// NOTE：曼哈顿距离,this.x + this.y + this.z.
+	/// TODO:曼哈顿距离,这个功能应该二维向量中增加这个方法呀?计算路径的时候很常用呀.
+	*/
+	///<summary>lengthManhattan</summary>
+	///<returns type="number">返回三维向量的长度（只读）</returns>
 	lengthManhattan: function () {
 
 		return Math.abs( this.x ) + Math.abs( this.y ) + Math.abs( this.z );
 
 	},
 
+	/*
+	///normalize方法将返回向量的长度为1（只读）.
+	/// 复习一下初中的几何吧,三角恒等式,给你准备好了 :) ,见维基百科:
+	/// http://zh.wikipedia.org/wiki/%E4%B8%89%E8%A7%92%E5%87%BD%E6%95%B0#.E4.B8.89.E8.A7.92.E6.81.92.E7.AD.89.E5.BC.8F
+	*/
+	///<summary>normalize</summary>
+	///<returns type="number">返回三维向量(x,y,z)值的和（只读）</returns>
 	normalize: function () {
 
-		return this.divideScalar( this.length() );
+		return this.divideScalar( this.length() );	//返回三维向量(x,y,z)值的和（只读）
 
 	},
 
+	/*
+	///setLength方法用来按照参数l(长度)设置新的三维向量(x,y,z)值.
+	/// NOTE:将以原点到当前向量的线段等比例缩放到参数l所指定的长度.
+	*/
+	///<summary>setLength</summary>
+	///<param name ="l" type="number">指定的长度</param>
+	///<returns type="Vector3">返回按照参数l(长度)设置新的三维向量(x,y,z)值.</returns>
 	setLength: function ( l ) {
 
 		var oldLength = this.length();
 
-		if ( oldLength !== 0 && l !== oldLength  ) {
+		if ( oldLength !== 0 && l !== oldLength  ) {		//做个判断,如果原长度与新长度不相等,并且原长度不为0.
 
-			this.multiplyScalar( l / oldLength );
+			this.multiplyScalar( l / oldLength );		//调用.multiplyScalar()方法,传递新长度与原长度的比.
 		}
 
-		return this;
+		return this;		//返回按照参数l(长度)设置新的三维向量(x,y,z)值.
 
 	},
 
+	/*lerp方法
+	///lerp方法在将当前三维向量(x,y,z)设置为下限和参数v(x,y,z)设为上限 之间进行线性插值，
+	/// alpha 表示权值。从下限当前三维向量(x,y,z)到上限参数v(x,y,z)乘以百分比alpha(0.0-1.0),加上当前三维向量(x,y,z)
+	///当前二维向量(x,y,z)的和赋值给当前三维向量(x,y,z),返回当前三维向量(x,y,z).
+	/// NOTE:注意，如果 当前三维向量(x,y,z) 和 参数v(x,y,z)是向量，则权值 alpha 必须是标量,取值范围是0.0-1.0.
+	*/
+	///<summary>lerp</summary>
+	///<param name ="v" type="Vector3">三维向量</param>
+	///<param name ="alpha" type="number">百分比权值(0.0-1.0)</param>
+	///<returns type="Vector3">三维向量</returns>	
 	lerp: function ( v, alpha ) {
 
 		this.x += ( v.x - this.x ) * alpha;
 		this.y += ( v.y - this.y ) * alpha;
 		this.z += ( v.z - this.z ) * alpha;
 
-		return this;
+		return this;	//返回三维向量
 
 	},
 
@@ -3071,19 +3106,32 @@ THREE.Vector3.prototype = {
 
 	},
 
+	/*
+	///distanceTo方法将返回当前三维向量到参数v的距离(只读).
+	*/
+	///<summary>distanceTo</summary>
+	///<param name ="v" type="Vector3">三维向量</param>
+	///<returns type="Vector3">返回当前三维向量到参数v的距离(只读).</returns>
 	distanceTo: function ( v ) {
 
-		return Math.sqrt( this.distanceToSquared( v ) );
+		return Math.sqrt( this.distanceToSquared( v ) );	//返回当前三维向量到参数v的距离(只读).
 
 	},
 
+	/*
+	///distanceToSquared方法将返回当前三维向量到参数v的距离的点积(点乘,数量积)(只读).
+	/// NOTE:关于点积的介绍参考维基百科:http://zh.wikipedia.org/wiki/%E6%95%B0%E9%87%8F%E7%A7%AF
+	*/
+	///<summary>distanceToSquared</summary>
+	///<param name ="v" type="Vector3">三维向量</param>
+	///<returns type="Vector3">返回当前三维向量到参数v的距离的点积(点乘,数量积)(只读)</returns>
 	distanceToSquared: function ( v ) {
 
 		var dx = this.x - v.x;
 		var dy = this.y - v.y;
 		var dz = this.z - v.z;
 
-		return dx * dx + dy * dy + dz * dz;
+		return dx * dx + dy * dy + dz * dz;			//当前三维向量到参数v的距离的点积(点乘,数量积)(只读).
 
 	},
 
@@ -3159,31 +3207,53 @@ THREE.Vector3.prototype = {
 
 	},
 
+	/*equals方法
+	///equals方法相当于比较运算符===,将当前三维向量和参数v中的(x,y,z)值进行对比,返回bool型值.
+	*/
+	///<summary>equals</summary>
+	///<param name ="v" type="Vector3">三维向量(x,y,z)</param>
+	///<returns type="bool">返回true or false</returns
 	equals: function ( v ) {
 
-		return ( ( v.x === this.x ) && ( v.y === this.y ) && ( v.z === this.z ) );
+		return ( ( v.x === this.x ) && ( v.y === this.y ) && ( v.z === this.z ) );	//返回true or false
 
 	},
 
+	/*fromArray方法
+	///fromArray方法将存储三维向量(x,y)值的数组赋值给当前三维向量对象
+	*/
+	///<summary>fromArray</summary>
+	///<param name ="array" type="Array">三维向量(x,y,z)值数组array[x,y,z]</param>
+	///<returns type="Vector3">返回新的三维向量</returns>	
 	fromArray: function ( array ) {
 
 		this.x = array[ 0 ];
 		this.y = array[ 1 ];
 		this.z = array[ 2 ];
 
-		return this;
+		return this;	//返回新的三维向量
 
 	},
 
+	/*toArray方法
+	///toArray方法将当前三维向量对象的属性赋值给数组array[0.5,0.5,0.5].返回一个数组对象.
+	*/
+	///<summary>toArray</summary>
+	///<returns type="Array">三维向量(x,y,z)值数组array[x,y,z]</returns>	
 	toArray: function () {
 
-		return [ this.x, this.y, this.z ];
+		return [ this.x, this.y, this.z ];	//三维向量(x,y)值数组array[x,y]
 
 	},
 
+	/*clone方法
+	///clone方法克隆一个三维向量对象.
+	*/
+	///<summary>clone</summary>
+	///<returns type="Vector3">返回三维向量对象</returns>	
 	clone: function () {
 
-		return new THREE.Vector3( this.x, this.y, this.z );
+		return new THREE.Vector3( this.x, this.y, this.z );		//返回三维向量
 
 	}
 
