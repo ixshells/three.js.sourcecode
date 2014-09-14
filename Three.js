@@ -2684,98 +2684,130 @@ THREE.Vector3.prototype = {
 		return this;	//返回新坐标值的三维向量
 
 	},
-
+	/*
+	///min方法用来将三维向量的(x,y,z)坐标值直接与参数v的(x,y)比较,如果当前三维向量的值大于参数v的(x,y,z),
+	///将参数v的(x,y,z)赋值给当前向量,并返回(x,y,z)值最小的三维向量.
+	*/
+	///<summary>min</summary>
+	///<param name ="v" type="Vector3">与当前对象(x,y)值参数v的(x,y,z)比较,并返回(x,y)值最小的三维向量.</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	min: function ( v ) {
 
-		if ( this.x > v.x ) {
+		if ( this.x > v.x ) {		//如果当前三维向量的x值大于参数v.x
 
-			this.x = v.x;
-
-		}
-
-		if ( this.y > v.y ) {
-
-			this.y = v.y;
+			this.x = v.x;	//将参数v的x值赋值给当前向量
 
 		}
 
-		if ( this.z > v.z ) {
+		if ( this.y > v.y ) {		//如果当前三维向量的y值大于参数v.y
 
-			this.z = v.z;
+			this.y = v.y;	//将参数v的y值赋值给当前向量
 
 		}
 
-		return this;
+		if ( this.z > v.z ) {		//如果当前三维向量的x值大于参数v.z
+
+			this.z = v.z;	//将参数v的z值赋值给当前向量
+
+		}
+
+		return this;	//返回新坐标值的三维向量
 
 	},
 
+	/*
+	///max方法用来将三维向量的(x,y,z)坐标值直接与参数v的(x,y,z)比较,如果当前三维向量的值小于参数v的(x,y,z),
+	///将参数v的(x,y,z)赋值给当前向量,并返回(x,y,z)值最大的三维向量.
+	*/
+	///<summary>min</summary>
+	///<param name ="v" type="Vector3">与当前对象(x,y,z)值参数v的(x,y,z)比较,并返回(x,y,z)值最大的三维向量.</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	max: function ( v ) {
 
-		if ( this.x < v.x ) {
+		if ( this.x < v.x ) {		//如果当前三维向量的x值小于参数v.x
 
-			this.x = v.x;
-
-		}
-
-		if ( this.y < v.y ) {
-
-			this.y = v.y;
+			this.x = v.x;	//将参数v的x值赋值给当前向量
 
 		}
 
-		if ( this.z < v.z ) {
+		if ( this.y < v.y ) {		//如果当前三维向量的x值小于参数v.y
 
-			this.z = v.z;
+			this.y = v.y;	//将参数v的y值赋值给当前向量
 
 		}
 
-		return this;
+		if ( this.z < v.z ) {		//如果当前三维向量的x值小于参数v.z
+
+			this.z = v.z;	//将参数v的z值赋值给当前向量
+
+		}
+
+		return this;	//返回新坐标值的三维向量
 
 	},
-
+	/*
+	///clamp方法用来将三维向量的(x,y)坐标值直接与参数min,参数max的(x,y,z)比较,如果当前三维向量的值小于参数min的(x,y,z)
+	///或者大于参数max的(x,y,z),对应的将参数min或max的(x,y,z)赋值给当前三维向量,
+	/// NOTE:保持当前三维向量在min,max所组成的三维空间的之内,最大不超过max的(x,y,z)值,最小不小于min的(x,y,z)值.
+	*/
+	///<summary>clamp</summary>
+	///<param name ="min" type="Vector3">三维向量.</param>
+	///<param name ="max" type="Vector3">三维向量.</param>
+	///<returns type="Vector2">返回指定界限内的三维向量</returns>
 	clamp: function ( min, max ) {
 
 		// This function assumes min < max, if this assumption isn't true it will not operate correctly
+		// 这个方法用来获得三维向量的最小值于最大值,如果没有获取到,说明函数运行错误.
 
-		if ( this.x < min.x ) {
+		if ( this.x < min.x ) {				//如果当前三维向量的x值小于参数min的x值
 
-			this.x = min.x;
+			this.x = min.x;				//将参数min的x值赋值给当前向量
 
-		} else if ( this.x > max.x ) {
+		} else if ( this.x > max.x ) {			//如果当前三维向量的x值大于参数max的x值
 
-			this.x = max.x;
-
-		}
-
-		if ( this.y < min.y ) {
-
-			this.y = min.y;
-
-		} else if ( this.y > max.y ) {
-
-			this.y = max.y;
+			this.x = max.x;				//将参数max的x值赋值给当前向量
 
 		}
 
-		if ( this.z < min.z ) {
+		if ( this.y < min.y ) {				//如果当前三维向量的x值小于参数min的y值
 
-			this.z = min.z;
+			this.y = min.y;				//将参数min的y值赋值给当前向量
 
-		} else if ( this.z > max.z ) {
+		} else if ( this.y > max.y ) {			//如果当前三维向量的y值大于参数max的y值
 
-			this.z = max.z;
+			this.y = max.y;				//将参数max的y值赋值给当前向量
 
 		}
 
-		return this;
+		if ( this.z < min.z ) {				//如果当前三维向量的x值小于参数min的z值
+
+			this.z = min.z;				//将参数min的z值赋值给当前向量
+
+		} else if ( this.z > max.z ) {			//如果当前三维向量的x值大于参数max的z值
+
+			this.z = max.z;				//将参数max的z值赋值给当前向量
+
+		}
+
+		return this;	//返回指定界限内的三维向量
 
 	},
-
-	clampScalar: ( function () {
+	/*
+	///clampScalar方法用来将三维向量的(x,y)坐标值直接与参数minVal,参数maxVal比较,如果当前三维向量的值小于参数minVal
+	///或者大于参数maxVal,将参数minVal或maxVal赋值给当前三维向量,
+	/// NOTE:
+	///		1. 保持当前三维向量在minVal,maxVal所组成的三维空间的之内,最大不超过maxVal值,最小不小于minVal值.
+	///		2. 这里与clamp()方法不同的是,这里传递的参数minVal,maxVal是一个标量,而clamp()方法的参数min,参数max是两个三维向量.
+	*/
+	///<summary>clampScalar</summary>
+	///<param name ="minVal" type="number">下限.</param>
+	///<param name ="maxVal" type="number">上限.</param>
+	///<returns type="Vector3">返回指定界限内的三维向量</returns>
+	clampScalar: ( function () {	//外侧括号是一种特殊的用法,似乎代表立即执行.小白,请见谅!
 
 		var min, max;
 
-		return function ( minVal, maxVal ) {
+		return function ( minVal, maxVal ) {	//创建匿名函数
 
 			if ( min === undefined ) {
 
@@ -2787,65 +2819,103 @@ THREE.Vector3.prototype = {
 			min.set( minVal, minVal, minVal );
 			max.set( maxVal, maxVal, maxVal );
 
-			return this.clamp( min, max );
+			return this.clamp( min, max );	//调用clamp()方法,返回指定界限内的三维向量
 
 		};
 
 	} )(),
 
+	/*
+	///floor方法用来返回小于或等于三维向量的(x,y,z)坐标值的最大整数
+	/// NOTE:去掉小数部分
+	*/
+	///<summary>floor</summary>
+	///<returns type="Vector3">返回圆整后的三维向量</returns>
 	floor: function () {
 
 		this.x = Math.floor( this.x );
 		this.y = Math.floor( this.y );
 		this.z = Math.floor( this.z );
 
-		return this;
+		return this;	//返回圆整后的三维向量
 
 	},
 
+	/*
+	///ceil方法用来返回大于或等于三维向量的(x,y,z)坐标值的最小整数
+	/// NOTE:将小数部分去掉加1.
+	*/
+	///<summary>ceil</summary>
+	///<returns type="Vector3">返回圆整后的三维向量</returns>
 	ceil: function () {
 
 		this.x = Math.ceil( this.x );
 		this.y = Math.ceil( this.y );
 		this.z = Math.ceil( this.z );
 
-		return this;
+		return this;	//返回圆整后的三维向量
 
 	},
 
+	/*
+	///round方法用来返回最接近三维向量的(x,y,z)坐标值的整数
+	/// NOTE:也就是四舍五入
+	*/
+	///<summary>round</summary>
+	///<returns type="Vector3">返回圆整后的三维向量</returns>
 	round: function () {
 
 		this.x = Math.round( this.x );
 		this.y = Math.round( this.y );
 		this.z = Math.round( this.z );
 
-		return this;
+		return this;	//返回圆整后的三维向量
 
 	},
 
+	/*
+	///roundToZero方法将当前三维向量的(x,y,z)坐标值若为负数时,返回大于或等于三维向量的(x,y,z)坐标值的最小整数
+	///	而当前三维向量的(x,y,z)坐标值若为正数时,返回小于或等于三维向量的(x,y,z)坐标值的最大整数
+	*/
+	///<summary>roundToZero</summary>
+	///<returns type="Vector3">返回圆整后的三维向量</returns>
 	roundToZero: function () {
 
 		this.x = ( this.x < 0 ) ? Math.ceil( this.x ) : Math.floor( this.x );
 		this.y = ( this.y < 0 ) ? Math.ceil( this.y ) : Math.floor( this.y );
 		this.z = ( this.z < 0 ) ? Math.ceil( this.z ) : Math.floor( this.z );
 
-		return this;
+		return this;	//返回圆整后的三维向量
 
 	},
 
+	/*
+	///negate方法将当前三维向量的(x,y,z)坐标值若为负数时,返回正数.
+	///	而当前三维向量的(x,y,z)坐标值若为正数时,返回负数.
+	/// NOTE:取当前三维向量的(x,y,z)坐标值相反数
+	*/
+	///<summary>negate</summary>
+	///<returns type="Vector3">返回取相反数后的三维向量</returns>
 	negate: function () {
 
 		this.x = - this.x;
 		this.y = - this.y;
 		this.z = - this.z;
 
-		return this;
+		return this;	//返回取相反数后的三维向量
 
 	},
 
+	/*
+	///dot方法将返回两个向量的点乘积(点乘,数量积).
+	/// NOTE:关于点积的介绍参考维基百科:http://zh.wikipedia.org/wiki/%E6%95%B0%E9%87%8F%E7%A7%AF
+	*/
+	///<summary>dot</summary>
+	///<param name ="v" type="Vector3">三维向量</param>
+	///<returns type="number">返回点乘积(点乘,数量积)</returns>
 	dot: function ( v ) {
 
-		return this.x * v.x + this.y * v.y + this.z * v.z;
+		return this.x * v.x + this.y * v.y + this.z * v.z;	//返回点乘积(点乘,数量积)
 
 	},
 
