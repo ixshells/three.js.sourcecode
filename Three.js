@@ -2919,15 +2919,27 @@ THREE.Vector3.prototype = {
 
 	},
 
+	/*
+	///lengthSq方法将返回这个三维向量的长度的平方（只读）.
+	/// NOTE：勾股定理a^2 + b^2 +c^2= d^2,这里返回的是d^2.
+	*/
+	///<summary>lengthSq</summary>
+	///<returns type="number">返回三维向量的长度的平方（只读）</returns>
 	lengthSq: function () {
 
-		return this.x * this.x + this.y * this.y + this.z * this.z;
+		return this.x * this.x + this.y * this.y + this.z * this.z;	//返回三维向量的长度的平方（只读）
 
 	},
 
+	/*
+	///length方法将返回三维向量的长度（只读）.
+	/// NOTE：勾股定理a^2 + b^2 + c^2=d^2,d=Math.sqrt(a^2 + b^2+c^2),这里返回的是d.
+	*/
+	///<summary>length</summary>
+	///<returns type="number">返回三维向量的长度（只读）</returns>
 	length: function () {
 
-		return Math.sqrt( this.x * this.x + this.y * this.y + this.z * this.z );
+		return Math.sqrt( this.x * this.x + this.y * this.y + this.z * this.z );		//返回三维向量的长度（只读）
 
 	},
 
