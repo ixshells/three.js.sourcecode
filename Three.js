@@ -3077,6 +3077,13 @@ THREE.Vector3.prototype = {
 
 	},
 
+	/*projectOnVector方法
+	///projectOnVector方法在将当前三维向量(x,y,z)投影一个向量到另一个向量,参数vector(x,y,z).
+	/// NOTE:进行Dot计算的前提是两个向量首先要变成单位向量,这里通过调用.normalize()得到单位向量.
+	*/
+	///<summary>projectOnVector</summary>
+	///<param name ="vector" type="Vector3">三维向量</param>
+	///<returns type="Vector3">三维向量</returns>	
 	projectOnVector: function () {
 
 		var v1, dot;
@@ -3097,6 +3104,14 @@ THREE.Vector3.prototype = {
 
 	}(),
 
+	/*projectOnPlane方法
+	///projectOnPlane方法在将当前三维向量(x,y,z)投影一个向量到一个平面(用一个向量表示,参数planeNormal(x,y,z)),然后当前向量减去
+	///从这个向量到这个向量到平面法线的投影.
+	/// NOTE:进行Dot计算的前提是两个向量首先要变成单位向量,这里通过调用.normalize()得到单位向量.
+	*/
+	///<summary>projectOnPlane</summary>
+	///<param name ="vector" type="Vector3">三维向量</param>
+	///<returns type="Vector3">三维向量</returns>	
 	projectOnPlane: function () {
 
 		var v1;
@@ -3105,9 +3120,9 @@ THREE.Vector3.prototype = {
 
 			if ( v1 === undefined ) v1 = new THREE.Vector3();
 
-			v1.copy( this ).projectOnVector( planeNormal );
+			v1.copy( this ).projectOnVector( planeNormal );		//调用.projectVector方法.
 
-			return this.sub( v1 );
+			return this.sub( v1 );	
 
 		}
 
