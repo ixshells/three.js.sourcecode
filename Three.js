@@ -2017,7 +2017,8 @@ THREE.Vector2.prototype = {
 
 	/*
 	///dot方法将返回两个向量的点乘积(点乘,数量积).
-	/// NOTE:关于点积的介绍参考维基百科:http://zh.wikipedia.org/wiki/%E6%95%B0%E9%87%8F%E7%A7%AF
+	/// NOTE:1. 关于点积的介绍参考维基百科:http://zh.wikipedia.org/wiki/%E6%95%B0%E9%87%8F%E7%A7%AF, 常用来进行方向性判断，如两向量点积大于0，则它们的方向朝向相近；如果小于0，则方向相反。
+	///	NOTE:2. Vector3.Dot也叫点积，它返回1个-1.0～1.0之间的一个值。网上确实也这么说。但是这个值表示什么呢？恩，表示返回进行Dot计算的两个向量之间的夹角的余弦值(Cos弧度角).要注意的是能进行Dot计算的前提是两个向量首先要变成单位向量！
 	*/
 	///<summary>dot</summary>
 	///<param name ="v" type="Vector2">二维向量</param>
@@ -2904,7 +2905,8 @@ THREE.Vector3.prototype = {
 
 	/*
 	///dot方法将返回两个向量的点乘积(点乘,数量积).
-	/// NOTE:关于点积的介绍参考维基百科:http://zh.wikipedia.org/wiki/%E6%95%B0%E9%87%8F%E7%A7%AF
+	/// NOTE:1. 关于点积的介绍参考维基百科:http://zh.wikipedia.org/wiki/%E6%95%B0%E9%87%8F%E7%A7%AF, 常用来进行方向性判断，如两向量点积大于0，则它们的方向朝向相近；如果小于0，则方向相反。
+	///	NOTE:2. Vector3.Dot也叫点积，它返回1个-1.0～1.0之间的一个值。网上确实也这么说。但是这个值表示什么呢？恩，表示返回进行Dot计算的两个向量之间的夹角的余弦值(Cos弧度角).要注意的是能进行Dot计算的前提是两个向量首先要变成单位向量！
 	*/
 	///<summary>dot</summary>
 	///<param name ="v" type="Vector3">三维向量</param>
@@ -3009,12 +3011,29 @@ THREE.Vector3.prototype = {
 
 	},
 
+	/*cross方法
+	///cross方法将返回两个交叉乘积,调用者本身与v的叉乘。叉乘是一个向量，垂直于参与叉乘的两个向量并呈右手螺旋法则。
+	/// 返回为同时垂直于两个参数向量的向量，方向可朝上也可朝下，由两向量夹角的方向决定。
+	/// NOTE:借助右手定则辅助判断方向。
+	/// 叉乘是一种在向量空间中向量的二元运算。与点乘不同，它的运算结果是一个伪向量而不是一个标量。
+	/// 叉乘的运算结果叫叉积（即交叉乘积）、外积或向量积。叉积与原来的两个向量都垂直。
+		 1、理论知识
+		   数学上的定义：c=axb【注：粗体小写字母表示向量】其中a,b,c均为向量。即两个向量的叉积得到的还是向量！
+		   性质1：c⊥a，c⊥b，即向量c垂直与向量a,b所在的平面。
+		   性质2：模长|c|=|a||b|sin<a,b>
+		   性质3：满足右手法则。从这点我们有axb ≠ bxa，而axb = - bxa。所以我们可以使用叉积的正负值来判断向量a，b的相对
+		   		  位置，即向量b是处于向量a的顺时针方向还是逆时针方向。
+	*/
+	///<summary>cross</summary>
+	///<param name ="v" type="Vector3">三维向量</param>
+	///<param name ="w" type="Vector3">三维向量</param>
+	///<returns type="Vector3">三维向量</returns>	
 	cross: function ( v, w ) {
 
 		if ( w !== undefined ) {
 
 			console.warn( 'THREE.Vector3: .cross() now only accepts one argument. Use .crossVectors( a, b ) instead.' );
-			return this.crossVectors( v, w );
+			return this.crossVectors( v, w );	//如果存在第二个参数,将调用.crossVectors()方法.
 
 		}
 
@@ -3024,10 +3043,27 @@ THREE.Vector3.prototype = {
 		this.y = z * v.x - x * v.z;
 		this.z = x * v.y - y * v.x;
 
-		return this;
+		return this;	//返回三维向量
 
 	},
 
+	/*crossVectors方法
+	///crossVectors方法将返回两个交叉乘积,调用者变为a，b的叉乘。叉乘是一个向量，垂直于参与叉乘的两个向量并呈右手螺旋法则。
+	/// 返回为同时垂直于两个参数向量的向量，方向可朝上也可朝下，由两向量夹角的方向决定。
+	/// NOTE:借助右手定则辅助判断方向。参考:http://zh.wikipedia.org/zh/%E5%90%91%E9%87%8F%E7%A7%AF
+	/// 叉乘是一种在向量空间中向量的二元运算。与点乘不同，它的运算结果是一个伪向量而不是一个标量。
+	/// 叉乘的运算结果叫叉积（即交叉乘积）、外积或向量积。叉积与原来的两个向量都垂直。
+		 1、理论知识
+		   数学上的定义：c=axb【注：粗体小写字母表示向量】其中a,b,c均为向量。即两个向量的叉积得到的还是向量！
+		   性质1：c⊥a，c⊥b，即向量c垂直与向量a,b所在的平面。
+		   性质2：模长|c|=|a||b|sin<a,b>
+		   性质3：满足右手法则。从这点我们有axb ≠ bxa，而axb = - bxa。所以我们可以使用叉积的正负值来判断向量a，b的相对位置，
+		   		  即向量b是处于向量a的顺时针方向还是逆时针方向。
+	*/
+	///<summary>crossVectors</summary>
+	///<param name ="a" type="Vector3">三维向量</param>
+	///<param name ="b" type="Vector3">三维向量</param>
+	///<returns type="Vector3">三维向量</returns>	
 	crossVectors: function ( a, b ) {
 
 		var ax = a.x, ay = a.y, az = a.z;
@@ -3037,7 +3073,7 @@ THREE.Vector3.prototype = {
 		this.y = az * bx - ax * bz;
 		this.z = ax * by - ay * bx;
 
-		return this;
+		return this;	//返回三维向量
 
 	},
 
@@ -3049,11 +3085,13 @@ THREE.Vector3.prototype = {
 
 			if ( v1 === undefined ) v1 = new THREE.Vector3();
 
-			v1.copy( vector ).normalize();
+			v1.copy( vector ).normalize();		//NOTE:进行Dot计算的前提是两个向量首先要变成单位向量,这里通过调用.normalize()得到单位向量.
 
-			dot = this.dot( v1 );
+			dot = this.dot( v1 );	//dot常用来进行方向性判断，如两向量点积大于0，则它们的方向朝向相近；如果小于0，则方向相反。
 
-			return this.copy( v1 ).multiplyScalar( dot );
+			return this.copy( v1 ).multiplyScalar( dot );	//投影一个向量到另一个向量。
+
+
 
 		};
 
