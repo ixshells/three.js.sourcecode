@@ -1795,9 +1795,8 @@ THREE.Vector2.prototype = {
 
 	/*
 	///divideScalar方法用来将二维向量的(x,y)坐标值直接与参数scalar相除.并返回新的坐标值的二维向量.
-	/// NOTE:
-	///		1. 参数scalar如果为0,当前对象(x,y)值直接设置为0!!
-	///		2. 这里与divide()方法不同的是,这里传递的参数scalar是一个标量,而divide()方法的参数v是一个二维向量.
+	/// NOTE:1. 参数scalar如果为0,当前对象(x,y)值直接设置为0!!
+	/// NOTE:2. 这里与divide()方法不同的是,这里传递的参数scalar是一个标量,而divide()方法的参数v是一个二维向量.
 	*/
 	///<summary>divideScalar</summary>
 	///<param name ="scalar" type="number">与当前对象(x,y)值相除的标量,数值</param>
@@ -1911,9 +1910,8 @@ THREE.Vector2.prototype = {
 	/*
 	///clampScalar方法用来将二维向量的(x,y)坐标值直接与参数minVal,参数maxVal比较,如果当前二维向量的值小于参数minVal
 	///或者大于参数maxVal,将参数minVal或maxVal赋值给当前二维向量,
-	/// NOTE:
-	///		1. 保持当前二维向量在minVal,maxVal所组成的二维空间的之内,最大不超过maxVal值,最小不小于minVal值.
-	///		2. 这里与clamp()方法不同的是,这里传递的参数minVal,maxVal是一个标量,而clamp()方法的参数min,参数max是两个二维向量.
+	/// NOTE:1. 保持当前二维向量在minVal,maxVal所组成的二维空间的之内,最大不超过maxVal值,最小不小于minVal值.
+	/// NOTE:2. 这里与clamp()方法不同的是,这里传递的参数minVal,maxVal是一个标量,而clamp()方法的参数min,参数max是两个二维向量.
 	*/
 	///<summary>clampScalar</summary>
 	///<param name ="minVal" type="number">下限.</param>
@@ -2655,9 +2653,8 @@ THREE.Vector3.prototype = {
 
 	/*
 	///divideScalar方法用来将三维向量的(x,y,z)坐标值直接与参数scalar相除.并返回新的坐标值的三维向量.
-	/// NOTE:
-	///		1. 参数scalar如果为0,当前对象(x,y,z)值直接设置为0!!
-	///		2. 这里与divide()方法不同的是,这里传递的参数scalar是一个标量,而divide()方法的参数v是一个三维向量.
+	/// NOTE:1. 参数scalar如果为0,当前对象(x,y,z)值直接设置为0!!
+	/// NOTE:2. 这里与divide()方法不同的是,这里传递的参数scalar是一个标量,而divide()方法的参数v是一个三维向量.
 	*/
 	///<summary>divideScalar</summary>
 	///<param name ="scalar" type="number">与当前对象(x,y,z)值相除的标量,数值</param>
@@ -2795,9 +2792,8 @@ THREE.Vector3.prototype = {
 	/*
 	///clampScalar方法用来将三维向量的(x,y)坐标值直接与参数minVal,参数maxVal比较,如果当前三维向量的值小于参数minVal
 	///或者大于参数maxVal,将参数minVal或maxVal赋值给当前三维向量,
-	/// NOTE:
-	///		1. 保持当前三维向量在minVal,maxVal所组成的三维空间的之内,最大不超过maxVal值,最小不小于minVal值.
-	///		2. 这里与clamp()方法不同的是,这里传递的参数minVal,maxVal是一个标量,而clamp()方法的参数min,参数max是两个三维向量.
+	/// NOTE: 1. 保持当前三维向量在minVal,maxVal所组成的三维空间的之内,最大不超过maxVal值,最小不小于minVal值.
+	/// NOTE: 2. 这里与clamp()方法不同的是,这里传递的参数minVal,maxVal是一个标量,而clamp()方法的参数min,参数max是两个三维向量.
 	*/
 	///<summary>clampScalar</summary>
 	///<param name ="minVal" type="number">下限.</param>
