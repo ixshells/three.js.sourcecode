@@ -2502,6 +2502,13 @@ THREE.Vector3.prototype = {
 
 	},
 
+	/*
+	///applyEuler方法将当前向量通过参数euler(THREE.Euler对象,欧拉对象)转换成四元数,应用四元数变换.
+	/// 实际上就是调用四元数下的.setFromEuler()方法.
+	*/
+	///<summary>applyEuler</summary>
+	///<param name ="euler" type="THREE.Euler">THREE.Euler对象,欧拉对象</param>
+	///<returns type="Vector3">返回变换后的三维向量</returns>
 	applyEuler: function () {
 
 		var quaternion;
@@ -2518,12 +2525,19 @@ THREE.Vector3.prototype = {
 
 			this.applyQuaternion( quaternion.setFromEuler( euler ) );
 
-			return this;
+			return this;	//返回变换后的三维向量
 
 		};
 
 	}(),
 
+	/*
+	///applyMatrix3方法将当前向量根据指定的轴(一个标准单位的向量),和角度旋转.或者说根据指定的轴和角度应用旋转.
+	*/
+	///<summary>applyMatrix3</summary>
+	///<param name ="axis" type="Vector3">三维向量</param>
+	///<param name ="angle" type="Matrix3">3x3矩阵</param>
+	///<returns type="Vector3">返回变换后的三维向量</returns>
 	applyAxisAngle: function () {
 
 		var quaternion;
@@ -2532,14 +2546,20 @@ THREE.Vector3.prototype = {
 
 			if ( quaternion === undefined ) quaternion = new THREE.Quaternion();
 
-			this.applyQuaternion( quaternion.setFromAxisAngle( axis, angle ) );
+			this.applyQuaternion( quaternion.setFromAxisAngle( axis, angle ) );	//实际调用的四元数下面的方法.setFromAxisAngle()
 
-			return this;
+			return this;	//返回变换后的三维向量
 
 		};
 
 	}(),
 
+	/*
+	///applyMatrix3方法将当前向量乘以一个3x3的矩阵,参数m(一个Matrix3的矩阵)
+	*/
+	///<summary>applyMatrix3</summary>
+	///<param name ="m" type="Matrix3">3x3矩阵</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	applyMatrix3: function ( m ) {
 
 		var x = this.x;
@@ -2552,10 +2572,16 @@ THREE.Vector3.prototype = {
 		this.y = e[ 1 ] * x + e[ 4 ] * y + e[ 7 ] * z;
 		this.z = e[ 2 ] * x + e[ 5 ] * y + e[ 8 ] * z;
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
+	/*
+	///applyMatrix4方法乘以该向量和参数m(一个Matrix4投影矩阵)的4x3的子集
+	*/
+	///<summary>applyMatrix4</summary>
+	///<param name ="m" type="Matrix4">仿射矩阵</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	applyMatrix4: function ( m ) {
 
 		// input: THREE.Matrix4 affine matrix
@@ -2568,10 +2594,16 @@ THREE.Vector3.prototype = {
 		this.y = e[ 1 ] * x + e[ 5 ] * y + e[ 9 ]  * z + e[ 13 ];
 		this.z = e[ 2 ] * x + e[ 6 ] * y + e[ 10 ] * z + e[ 14 ];
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
+	/*
+	///applyProjection方法乘以该向量和参数m(一个Matrix4投影矩阵),然后除以视角.
+	*/
+	///<summary>applyProjection</summary>
+	///<param name ="m" type="Matrix4">投影矩阵</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	applyProjection: function ( m ) {
 
 		// input: THREE.Matrix4 projection matrix
@@ -2589,6 +2621,12 @@ THREE.Vector3.prototype = {
 
 	},
 
+	/*
+	///applyQuaternion方法应用一个四元数变换到当前三维向量.
+	*/
+	///<summary>applyQuaternion</summary>
+	///<param name ="q" type="Quaternion">四元数</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	applyQuaternion: function ( q ) {
 
 		var x = this.x;
@@ -2613,11 +2651,17 @@ THREE.Vector3.prototype = {
 		this.y = iy * qw + iw * - qy + iz * - qx - ix * - qz;
 		this.z = iz * qw + iw * - qz + ix * - qy - iy * - qx;
 
-		return this;
+		return this;	//返回新坐标值的三维向量
 
 	},
 
-	transformDirection: function ( m ) {
+	/*
+	///transformDirection方法通过参数m(一个Matrix4投射矩阵的3x3子集)转换这个向量的方向
+	*/
+	///<summary>transformDirection</summary>
+	///<param name ="m" type="Matrix4">仿射矩阵</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
+		transformDirection: function ( m ) {
 
 		// input: THREE.Matrix4 affine matrix
 		// vector interpreted as a direction
@@ -2630,9 +2674,9 @@ THREE.Vector3.prototype = {
 		this.y = e[ 1 ] * x + e[ 5 ] * y + e[ 9 ]  * z;
 		this.z = e[ 2 ] * x + e[ 6 ] * y + e[ 10 ] * z;
 
-		this.normalize();
+		this.normalize();	//返回单位量
 
-		return this;
+		return this;	//返回新的三维向量
 
 	},
 
@@ -3107,10 +3151,9 @@ THREE.Vector3.prototype = {
 	/*projectOnPlane方法
 	///projectOnPlane方法在将当前三维向量(x,y,z)投影一个向量到一个平面(用一个向量表示,参数planeNormal(x,y,z)),然后当前向量减去
 	///从这个向量到这个向量到平面法线的投影.
-	/// NOTE:进行Dot计算的前提是两个向量首先要变成单位向量,这里通过调用.normalize()得到单位向量.
 	*/
 	///<summary>projectOnPlane</summary>
-	///<param name ="vector" type="Vector3">三维向量</param>
+	///<param name ="planeNormal" type="Vector3">三维向量</param>
 	///<returns type="Vector3">三维向量</returns>	
 	projectOnPlane: function () {
 
@@ -3128,6 +3171,13 @@ THREE.Vector3.prototype = {
 
 	}(),
 
+	/*reflect方法
+	///reflect方法沿着法线(参数normal)反射向量.
+	/// NOTE:reflect方法其实就是对一个向量进行镜像.
+	*/
+	///<summary>reflect</summary>
+	///<param name ="normal" type="Vector3">三维向量</param>
+	///<returns type="Vector3">返回一个反射过后的向量.</returns>	
 	reflect: function () {
 
 		// reflect incident vector off plane orthogonal to normal
@@ -3139,19 +3189,25 @@ THREE.Vector3.prototype = {
 
 			if ( v1 === undefined ) v1 = new THREE.Vector3();
 
-			return this.sub( v1.copy( normal ).multiplyScalar( 2 * this.dot( normal ) ) );
+			return this.sub( v1.copy( normal ).multiplyScalar( 2 * this.dot( normal ) ) );	//返回一个反射过后的向量.
 
 		}
 
 	}(),
 
+	/*angleTo方法
+	///angleTo方法返回当前向量与另一个向量的夹角.
+	*/
+	///<summary>angleTo</summary>
+	///<param name ="v" type="Vector3">三维向量</param>
+	///<returns type="number">返回当前向量与另一个向量的夹角</returns>	
 	angleTo: function ( v ) {
 
 		var theta = this.dot( v ) / ( this.length() * v.length() );
 
 		// clamp, to handle numerical problems
 
-		return Math.acos( THREE.Math.clamp( theta, - 1, 1 ) );
+		return Math.acos( THREE.Math.clamp( theta, - 1, 1 ) );	//返回当前向量与另一个向量的
 
 	},
 
@@ -3184,51 +3240,88 @@ THREE.Vector3.prototype = {
 
 	},
 
+	
+	/// NOTE:setEulerFromRotationMatrix()方法已经删除,使用Euler.setFromRotationMatrix()替换,此处保留函数为了向下兼容.
 	setEulerFromRotationMatrix: function ( m, order ) {
 
 		console.error( 'THREE.Vector3: .setEulerFromRotationMatrix() has been removed. Use Euler.setFromRotationMatrix() instead.' );
 
 	},
 
+	/// NOTE:setEulerFromQuaternion()方法已经删除,使用Euler.setFromQuaternion()替换,此处保留函数为了向下兼容.
 	setEulerFromQuaternion: function ( q, order ) {
 
 		console.error( 'THREE.Vector3: .setEulerFromQuaternion() has been removed. Use Euler.setFromQuaternion() instead.' );
 
 	},
 
+	/*
+	///getPositionFromMatrix方法将返回从矩阵中的元素得到的新的向量值的向量.
+	/// NOTE:getPositionFromMatrix()方法已经删除,使用.setFromMatrixPosition()替换,此处保留函数为了向下兼容.
+	*/
+	///<summary>getPositionFromMatrix</summary>
+	///<param name ="m" type="Matrix">矩阵</param>
+	///<returns type="Vector3">返回三维向量</returns>
 	getPositionFromMatrix: function ( m ) {
 
 		console.warn( 'THREE.Vector3: .getPositionFromMatrix() has been renamed to .setFromMatrixPosition().' );
 
-		return this.setFromMatrixPosition( m );
+		return this.setFromMatrixPosition( m );		//返回三维向量
 
 	},
 
+	/*
+	///getScaleFromMatrix方法将返回从矩阵中的元素的长度赋值给当前向量.
+	/// NOTE:getScaleFromMatrix()方法已经删除,使用.setFromMatrixScale()替换,此处保留函数为了向下兼容.
+	*/
+	///<summary>getScaleFromMatrix</summary>
+	///<param name ="m" type="Matrix">矩阵</param>
+	///<returns type="Vector3">返回三维向量</returns>
 	getScaleFromMatrix: function ( m ) {
 
 		console.warn( 'THREE.Vector3: .getScaleFromMatrix() has been renamed to .setFromMatrixScale().' );
 
-		return this.setFromMatrixScale( m );
+		return this.setFromMatrixScale( m );	//返回三维向量
 	},
 
+	/*
+	///getColumnFromMatrix方法将矩阵指定的列中的元素的向量值赋值给给当前的向量.
+	/// NOTE:getColumnFromMatrix()方法已经删除,使用.setFromMatrixColumn()替换,此处保留函数为了向下兼容.
+	*/
+	///<summary>getColumnFromMatrix</summary>
+	///<param name ="index" type="number">列数,列的下标.</param>
+	///<param name ="matrix" type="Matrix">矩阵</param>
+	///<returns type="Vector3">返回三维向量</returns>
 	getColumnFromMatrix: function ( index, matrix ) {
 
 		console.warn( 'THREE.Vector3: .getColumnFromMatrix() has been renamed to .setFromMatrixColumn().' );
 
-		return this.setFromMatrixColumn( index, matrix );
+		return this.setFromMatrixColumn( index, matrix );	//返回三维向量
 
 	},
 
+	/*
+	///setFromMatrixPosition方法将返回从矩阵中的元素得到的新的向量值的向量.
+	*/
+	///<summary>setFromMatrixPosition</summary>
+	///<param name ="m" type="Matrix">矩阵</param>
+	///<returns type="Vector3">返回三维向量</returns>
 	setFromMatrixPosition: function ( m ) {
 
 		this.x = m.elements[ 12 ];
 		this.y = m.elements[ 13 ];
 		this.z = m.elements[ 14 ];
 
-		return this;
+		return this;	//返回三维向量
 
 	},
 
+	/*
+	///setFromMatrixScale方法将返回从矩阵中的元素的长度赋值给当前向量.
+	*/
+	///<summary>setFromMatrixScale</summary>
+	///<param name ="m" type="Matrix">矩阵</param>
+	///<returns type="Vector3">返回三维向量</returns>
 	setFromMatrixScale: function ( m ) {
 
 		var sx = this.set( m.elements[ 0 ], m.elements[ 1 ], m.elements[  2 ] ).length();
@@ -3239,9 +3332,16 @@ THREE.Vector3.prototype = {
 		this.y = sy;
 		this.z = sz;
 
-		return this;
+		return this;	//返回三维向量
 	},
 
+	/*
+	///setFromMatrixColumn方法将矩阵指定的列中的元素的向量值赋值给给当前的向量.
+	*/
+	///<summary>setFromMatrixColumn</summary>
+	///<param name ="index" type="number">列数,列的下标.</param>
+	///<param name ="matrix" type="Matrix">矩阵</param>
+	///<returns type="Vector3">返回三维向量</returns>
 	setFromMatrixColumn: function ( index, matrix ) {
 
 		var offset = index * 4;
@@ -3252,7 +3352,7 @@ THREE.Vector3.prototype = {
 		this.y = me[ offset + 1 ];
 		this.z = me[ offset + 2 ];
 
-		return this;
+		return this;	//返回三维向量
 
 	},
 
