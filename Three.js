@@ -1012,13 +1012,26 @@ THREE.ColorKeywords = {
  * @author WestLangley / http://github.com/WestLangley
  * @author bhouston / http://exocortex.com
  */
-
+/*
+///Quaternion对象的构造函数.用来创建一个四元数对象.Quaternion对象的功能函数采用
+///定义构造的函数原型对象来实现.
+///	NOTE:四元数通俗的讲,是一种数学方法,经常用来对3维向量进行平移,缩放,旋转等变换操作的方法.一种非常方便使用的数学方法.
+///
+///	用法: var p2d = new Quaternion(5,3,2,1)
+///	创建一个x坐标为5,y坐标为3的向量,z坐标为2的向量,w是其次坐标.
+///	NOTE: 参数(x,y,z,w)坐标为可选参数,如果不指定参数(x,y,z,w),将创建一个坐标为(0,0,0,1)的向量.
+*/
+///<summary>Quaternion</summary>
+///<param name ="x" type="number">x坐标</param>
+///<param name ="y" type="number">y坐标</param>
+///<param name ="z" type="number">z坐标</param>
+///<param name ="w" type="number">w坐标</param>
 THREE.Quaternion = function ( x, y, z, w ) {
 
 	this._x = x || 0;
 	this._y = y || 0;
 	this._z = z || 0;
-	this._w = ( w !== undefined ) ? w : 1;
+	this._w = ( w !== undefined ) ? w : 1;	//如果w没有设定值,这里将w初始化1.
 
 };
 
