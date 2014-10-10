@@ -1019,6 +1019,7 @@ THREE.ColorKeywords = {
 ///	NOTE: 齐次,是一种用来解决变换等操作的快捷方法.w称为齐次。三维空间的点(x,y,z)，用四维向量表示成(x,y,z,1)和(x,y,z,0)是不一样的，前者可以用变换矩阵实现平移等操作，后者不能。
 /// NOTE: 在进行和向量计算中，为了不至于混淆点和向量，另外，在进行几何变换时，为了加快运算速度，简化计算，往往使用矩阵，而在使用矩阵运算时，矩阵的乘积只能表示旋转、比例和剪切等等变换，而不能表示平移变换。因此为统一计算（使用齐次在数学中的意义还要广），引入了第四个分量w，这使得原本二维变成三维，同理三维变为四维，而w称为比例因子，当w不为0时(一般设1)，表示一个，一个三维的三个分量x，y，z用齐次表示为变为x，y，z，w的四维空间，变换成三维是方式是x/w,y/w,z/w，当w为0时，在数学上代表无穷远点，即并非一个具体的位置，而是一个具有大小和方向的向量。从而，通过w我们就可以用同一系统表示两种不同的量
 /// NOTE: Quaternion对象下面的方法大部分都支持回调函数.使用方法q.set(x,y,z,w).onchange(function callback(){ ...... })
+/// NOTE: 维基百科http://zh.wikipedia.org/wiki/%E5%9B%9B%E5%85%83%E6%95%B8
 ///
 ///	用法: var p2d = new Quaternion(5,3,2,1)
 ///	创建一个x为5,y为3的向量,z为2的向量,w是其次.
@@ -1440,22 +1441,35 @@ THREE.Quaternion.prototype = {
 			this._z = v1.z;
 			this._w = r;
 
-			this.normalize();
+			this.normalize();	//通过调用.normalize()得到单位向量
 
 			return this;	//返回新的四元数
 
 		}
 
-	}(),
+	}(),	//立即执行
 
+	/*
+	///inverse方法将返回自共轭的四元数的单位量.如果四元数为 (x, y, z, w)，那么经函数 conjugate 处理后，就会返回四元数(-x, -y, -z, w)。
+	/// NOTE: 如果四元数为 (x, y, z, w)，那么经函数 conjugate 处理后，就会返回四元数(-x, -y, -z, w)。
+	*/
+	///<summary>inverse</summary>
+	///<returns type="Quaternion">返回自共轭四元数单位量</returns>
 	inverse: function () {
 
-		this.conjugate().normalize();
+		this.conjugate().normalize();	//通过调用.normalize()得到单位量
 
-		return this;
+		return this;	//返回自共轭四元数单位量
 
 	},
 
+
+	/*
+	///conjugate方法将返回自共轭的四元数的.如果四元数为 (x, y, z, w)，那么经函数 conjugate 处理后，就会返回四元数(-x, -y, -z, w)。
+	/// NOTE: 如果四元数为 (x, y, z, w)，那么经函数 conjugate 处理后，就会返回四元数(-x, -y, -z, w)。
+	*/
+	///<summary>conjugate</summary>
+	///<returns type="Quaternion">返回自共轭四元数</returns>
 	conjugate: function () {
 
 		this._x *= - 1;
@@ -1464,7 +1478,7 @@ THREE.Quaternion.prototype = {
 
 		this.onChangeCallback();	//调用回调函数.
 
-		return this;
+		return this;	//返回自共轭四元数
 
 	},
 
