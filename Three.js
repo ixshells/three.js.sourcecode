@@ -1199,7 +1199,7 @@ THREE.Quaternion.prototype = {
 	},
 
 	/*
-	///applyEuler方法通过一次欧拉旋转(参数euler)设置四维数旋转
+	///applyEuler方法通过一次欧拉旋转(参数euler)设置四元数旋转
 	*/
 	///<summary>applyEuler</summary>
 	///<param name ="euler" type="THREE.Euler">THREE.Euler对象,欧拉对象</param>
@@ -5957,7 +5957,7 @@ THREE.Matrix3.prototype = {
 	constructor: THREE.Matrix3,	//构造器
 
 	/*
-	///set方法用来从新设置Matrix3(3x3矩阵)的元素值.并返回新的坐标值的Euler(欧拉角).
+	///set方法用来从新设置Matrix3(3x3矩阵)的元素值.并返回新的坐标值的Matrix3(3x3矩阵).
 	/// TODO:修改set方法,兼容n11, n12, n13, n21, n22, n23, n31, n32, n33参数省略支持多态.
 	*/
 	///<summary>set</summary>
@@ -6010,7 +6010,7 @@ THREE.Matrix3.prototype = {
 	///copy方法用来复制3x3矩阵的元素值.并返回新的Matrix3(3x3矩阵).
 	*/
 	///<summary>copy</summary>
-	///<param name ="Matrix3(3x3矩阵)" type="Matrix3(3x3矩阵)">Euler(欧拉角)</param>
+	///<param name ="m" type="Matrix3(3x3矩阵)">Euler(4x4矩阵)</param>
 	///<returns type="Matrix3(3x3矩阵)">返回新的Matrix3(3x3矩阵)</returns>	
 	copy: function ( m ) {
 
@@ -6361,13 +6361,41 @@ THREE.Matrix3.prototype = {
  * @author bhouston / http://exocortex.com
  * @author WestLangley / http://github.com/WestLangley
  */
-
-
+///Matrix4对象的构造函数.用来创建一个4x4矩阵.Matrix4对象的功能函数采用
+///定义构造的函数原型对象来实现,实际就是一个数组.
+///
+///	用法: var m = new Matrix4(11, 12, 13, 14, 21, 22, 23, 24, 31, 32, 33, 34, 41, 42, 43, 44)
+///	创建一个4x4的矩阵,其实就是一个长度为9的数组,将参数(11, 12, 13, 21, 22, 23, 31, 32, 33, 41, 42, 43, 44)传递给数组用来初始化.
+/// 一个变换矩阵可以执行任意的线形3D变换（例如，平移，旋转，缩放，切边等等）并且透视变换使用齐次坐标。
+/// 脚本中很少使用矩阵：最常用Vector3，Quaternion，而且Transform类的功能更简单。单纯的矩阵用于特殊情况，如设置非标准相机投影。
+///
+///	NOTE: 参数 n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33, n34, 41, 42, 43, 44 代表4x4矩阵中的元素的值,n11表示矩阵的第一行,第一列的元素值
+///
+///<summary>Matrix4</summary>
+///<param name ="n11" type="number">n11第 1 行,第 1 列的元素值</param>
+///<param name ="n12" type="number">n12第 1 行,第 2 列的元素值</param>
+///<param name ="n13" type="number">n13第 1 行,第 3 列的元素值</param>
+///<param name ="n13" type="number">n13第 1 行,第 4 列的元素值</param>
+///<param name ="n21" type="number">n21第 2 行,第 1 列的元素值</param>
+///<param name ="n22" type="number">n22第 2 行,第 2 列的元素值</param>
+///<param name ="n23" type="number">n23第 2 行,第 3 列的元素值</param>
+///<param name ="n23" type="number">n23第 2 行,第 4 列的元素值</param>
+///<param name ="n31" type="number">n31第 3 行,第 1 列的元素值</param>
+///<param name ="n32" type="number">n32第 3 行,第 2 列的元素值</param>
+///<param name ="n33" type="number">n33第 3 行,第 3 列的元素值</param>
+///<param name ="n33" type="number">n33第 3 行,第 4 列的元素值</param>
+///<param name ="n31" type="number">n31第 4 行,第 1 列的元素值</param>
+///<param name ="n32" type="number">n32第 4 行,第 2 列的元素值</param>
+///<param name ="n33" type="number">n33第 4 行,第 3 列的元素值</param>
+///<param name ="n33" type="number">n33第 4 行,第 4 列的元素值</param>
+///<returns type="Matrix4">返回新的4x4矩阵</returns>
 THREE.Matrix4 = function ( n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33, n34, n41, n42, n43, n44 ) {
 
 	this.elements = new Float32Array( 16 );
 
+	// TODO: 如果n11没有定义,Matrix4将被初始化为一个单位矩阵.如果n11定义了值,直接复制该值到矩阵中.
 	// TODO: if n11 is undefined, then just set to identity, otherwise copy all other values into matrix
+	// 我们不支持semi规范的Matrix4(4x4矩阵),semi规范很奇怪???(英语实在不过关)
 	//   we should not support semi specification of Matrix4, it is just weird.
 
 	var te = this.elements;
@@ -6375,14 +6403,39 @@ THREE.Matrix4 = function ( n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33
 	te[ 0 ] = ( n11 !== undefined ) ? n11 : 1; te[ 4 ] = n12 || 0; te[ 8 ] = n13 || 0; te[ 12 ] = n14 || 0;
 	te[ 1 ] = n21 || 0; te[ 5 ] = ( n22 !== undefined ) ? n22 : 1; te[ 9 ] = n23 || 0; te[ 13 ] = n24 || 0;
 	te[ 2 ] = n31 || 0; te[ 6 ] = n32 || 0; te[ 10 ] = ( n33 !== undefined ) ? n33 : 1; te[ 14 ] = n34 || 0;
-	te[ 3 ] = n41 || 0; te[ 7 ] = n42 || 0; te[ 11 ] = n43 || 0; te[ 15 ] = ( n44 !== undefined ) ? n44 : 1;
+	te[ 3 ] = n41 || 0; te[ 7 ] = n42 || 0; te[ 11 ] = n43 || 0; te[ 15 ] = ( n44 !== undefined ) ? n44 : 1;	//初始化Matrix4(4x4矩阵)对象.
 
 };
 
+/****************************************
+****下面是Matrix4对象提供的功能函数.
+****************************************/
 THREE.Matrix4.prototype = {
 
-	constructor: THREE.Matrix4,
+	constructor: THREE.Matrix4,	//构造器
 
+	/*
+	///set方法用来从新设置Matrix4(4x4矩阵)的元素值.并返回新的坐标值的Matrix4(4x4矩阵).
+	/// TODO:修改set方法,兼容 n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33, n34, 41, 42, 43, 44 参数省略支持多态.
+	*/
+	///<summary>set</summary>
+	///<param name ="n11" type="number">n11第 1 行,第 1 列的元素值</param>
+	///<param name ="n12" type="number">n12第 1 行,第 2 列的元素值</param>
+	///<param name ="n13" type="number">n13第 1 行,第 3 列的元素值</param>
+	///<param name ="n13" type="number">n13第 1 行,第 4 列的元素值</param>
+	///<param name ="n21" type="number">n21第 2 行,第 1 列的元素值</param>
+	///<param name ="n22" type="number">n22第 2 行,第 2 列的元素值</param>
+	///<param name ="n23" type="number">n23第 2 行,第 3 列的元素值</param>
+	///<param name ="n23" type="number">n23第 2 行,第 4 列的元素值</param>
+	///<param name ="n31" type="number">n31第 3 行,第 1 列的元素值</param>
+	///<param name ="n32" type="number">n32第 3 行,第 2 列的元素值</param>
+	///<param name ="n33" type="number">n33第 3 行,第 3 列的元素值</param>
+	///<param name ="n33" type="number">n33第 3 行,第 4 列的元素值</param>
+	///<param name ="n31" type="number">n31第 4 行,第 1 列的元素值</param>
+	///<param name ="n32" type="number">n32第 4 行,第 2 列的元素值</param>
+	///<param name ="n33" type="number">n33第 4 行,第 3 列的元素值</param>
+	///<param name ="n33" type="number">n33第 4 行,第 4 列的元素值</param>
+	///<returns type="Matrix4">返回新的4x4矩阵</returns>
 	set: function ( n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33, n34, n41, n42, n43, n44 ) {
 
 		var te = this.elements;
@@ -6392,10 +6445,19 @@ THREE.Matrix4.prototype = {
 		te[ 2 ] = n31; te[ 6 ] = n32; te[ 10 ] = n33; te[ 14 ] = n34;
 		te[ 3 ] = n41; te[ 7 ] = n42; te[ 11 ] = n43; te[ 15 ] = n44;
 
-		return this;
+		return this;	//返回新的4x4矩阵
 
 	},
 
+	/*
+	///identity方法用来获得一个4x4矩阵的单位矩阵
+	///
+	/// NOTE:在矩阵的乘法中，有一种矩阵起着特殊的作用，如同数的乘法中的1,我们称这种矩阵为单位矩阵
+	/// 	 它是个方阵，从左上角到右下角的对角线（称为主对角线）上的元素均为1以外全都为0。
+	/// 	 对于单位矩阵，有AE=EA=A
+	*/
+	///<summary>identity</summary>
+	///<returns type="Matrix4(4x4矩阵)">返回4x4矩阵的一个单位矩阵</returns>	
 	identity: function () {
 
 		this.set(
@@ -6407,25 +6469,44 @@ THREE.Matrix4.prototype = {
 
 		);
 
-		return this;
+		return this;	//返回4x4矩阵的一个单位矩阵
 
 	},
 
+	/*
+	///copy方法用来复制4x4矩阵的元素值.并返回新的Matrix4(4x4矩阵).
+	*/
+	///<summary>copy</summary>
+	///<param name ="m" type="Matrix4(4x4矩阵)">Matrix4(4x4矩阵)</param>
+	///<returns type="Matrix4(4x4矩阵)">返回新的Matrix4(4x4矩阵)</returns>	
 	copy: function ( m ) {
 
 		this.elements.set( m.elements );
 
-		return this;
+		return this;	//返回新的Matrix4(4x4矩阵)
 
 	},
 
+	/*
+	///extractPosition方法用来复制参数m(4x4矩阵)的平移分量.并返回新的Matrix4(4x4矩阵).
+	/// NOTE: extractPosition方法已经被重命名为.copyPosition()
+	*/
+	///<summary>extractPosition</summary>
+	///<param name ="m" type="Matrix4(4x4矩阵)">Matrix4(4x4矩阵)</param>
+	///<returns type="Matrix4(4x4矩阵)">返回新的Matrix4(4x4矩阵)</returns>	
 	extractPosition: function ( m ) {
 
 		console.warn( 'THREEMatrix4: .extractPosition() has been renamed to .copyPosition().' );
-		return this.copyPosition( m );
+		return this.copyPosition( m );	//调用copyPosition()方法,返回新的Matrix4(4x4矩阵)
 
 	},
 
+	/*
+	///copyPosition方法用来复制参数m(4x4矩阵)的平移分量.并返回新的Matrix4(4x4矩阵).
+	*/
+	///<summary>copyPosition</summary>
+	///<param name ="m" type="Matrix4(4x4矩阵)">Matrix4(4x4矩阵)</param>
+	///<returns type="Matrix4(4x4矩阵)">返回新的Matrix4(4x4矩阵)</returns>	
 	copyPosition: function ( m ) {
 
 		var te = this.elements;
@@ -6435,10 +6516,16 @@ THREE.Matrix4.prototype = {
 		te[ 13 ] = me[ 13 ];
 		te[ 14 ] = me[ 14 ];
 
-		return this;
+		return this;	//返回新的Matrix4(4x4矩阵)
 
 	},
 
+	/*
+	///extractRotation方法用来提取参数m(4x4矩阵)的旋转分量.并返回新的Matrix4(4x4矩阵).
+	*/
+	///<summary>extractRotation</summary>
+	///<param name ="m" type="Matrix4(4x4矩阵)">Matrix4(4x4矩阵)</param>
+	///<returns type="Matrix4(4x4矩阵)">返回新的Matrix4(4x4矩阵)</returns>	
 	extractRotation: function () {
 
 		var v1 = new THREE.Vector3();
@@ -6464,12 +6551,18 @@ THREE.Matrix4.prototype = {
 			te[ 9 ] = me[ 9 ] * scaleZ;
 			te[ 10 ] = me[ 10 ] * scaleZ;
 
-			return this;
+			return this;	//返回新的Matrix4(4x4矩阵)
 
 		};
 
 	}(),
 
+	/*
+	///applyEuler方法通过欧拉旋转(参数euler)对Matrix4(4x4矩阵)应用旋转变换.
+	*/
+	///<summary>applyEuler</summary>
+	///<param name ="euler" type="THREE.Euler">THREE.Euler对象,欧拉对象</param>
+	///<returns type="Matrix4">返回变换后的Matrix4(4x4矩阵)</returns>
 	makeRotationFromEuler: function ( euler ) {
 
 		if ( euler instanceof THREE.Euler === false ) {
@@ -6582,30 +6675,44 @@ THREE.Matrix4.prototype = {
 			te[ 10 ] = bd * f + ac;
 
 		}
-
+		//最后一列
 		// last column
 		te[ 3 ] = 0;
 		te[ 7 ] = 0;
 		te[ 11 ] = 0;
 
+		//最下面的一行
 		// bottom row
 		te[ 12 ] = 0;
 		te[ 13 ] = 0;
 		te[ 14 ] = 0;
 		te[ 15 ] = 1;
 
-		return this;
+		return this;	//返回变换后的Matrix4(4x4矩阵)
 
 	},
 
+	/*
+	///setRotationFromQuaternion方法通过四元数对Matrix4(4x4矩阵)应用旋转变换.
+	/// NOTE: setRotationFromQuaternion()方法已经被重命名为makeRotationFromQuaternion(),这里保留是为了向下兼容.
+	*/
+	///<summary>setRotationFromQuaternion</summary>
+	///<param name ="q" type="Quaternion">四元数</param>
+	///<returns type="Matrix4(4x4矩阵)">返回新的Matrix4(4x4矩阵)</returns>
 	setRotationFromQuaternion: function ( q ) {
 
 		console.warn( 'THREE.Matrix4: .setRotationFromQuaternion() has been renamed to .makeRotationFromQuaternion().' );
 
-		return this.makeRotationFromQuaternion( q );
+		return this.makeRotationFromQuaternion( q );	//调用makeRotationFromQuaternion()方法,应用旋转变换,并返回新的Matrix4(4x4矩阵)对象.
 
 	},
 
+	/*
+	///makeRotationFromQuaternion方法通过四元数对Matrix4(4x4矩阵)应用旋转变换.
+	*/
+	///<summary>setRotationFromQuaternion</summary>
+	///<param name ="q" type="Quaternion">四元数</param>
+	///<returns type="Matrix4(4x4矩阵)">返回新的Matrix4(4x4矩阵)</returns>
 	makeRotationFromQuaternion: function ( q ) {
 
 		var te = this.elements;
@@ -6628,21 +6735,36 @@ THREE.Matrix4.prototype = {
 		te[ 6 ] = yz + wx;
 		te[ 10 ] = 1 - ( xx + yy );
 
+		//最后一列
 		// last column
 		te[ 3 ] = 0;
 		te[ 7 ] = 0;
 		te[ 11 ] = 0;
 
+		//最后一行
 		// bottom row
 		te[ 12 ] = 0;
 		te[ 13 ] = 0;
 		te[ 14 ] = 0;
 		te[ 15 ] = 1;
 
-		return this;
+		return this;	//返回新的Matrix4(4x4矩阵)
 
 	},
 
+	/*
+	///lookAt(eye,center,up)将对象设定为一个视图矩阵，参数都是Vector3对象，该矩阵只会用到eye和center的相对位置。
+	///该视图矩阵表示，摄像机在eye位置看向center位置，且向上的向量（这一点稍后解释）为up时的视图矩阵。
+	///视图矩阵又可以看做摄像机的模型矩阵，所以该函数产生的矩阵又可以表示以下变换：将物体从原点平移至位置center-eye，
+	///再将其旋转至向上的向量为up。向上的向量up用来固定相机，可以想象当相机固定在一点，镜头朝向固定方向的时候，
+	///还是可以在一个维度里自由旋转的，up向量固定相机的这个维度。
+	///这里的解释摘抄自:http://www.cnblogs.com/yiyezhai/archive/2012/11/29/2791319.html
+	*/
+	///<summary>lookAt</summary>
+	///<param name ="eye" type="Vector3">表示相机位置的Vector3三维向量</param>
+	///<param name ="target" type="Vector3">表示目标的Vector3三维向量</param>
+	///<param name ="up" type="Vector3">表示向上的Vector3三维向量</param>
+	///<returns type="Matrix4(4x4矩阵)">返回新的Matrix4(4x4矩阵)</returns>
 	lookAt: function () {
 
 		var x = new THREE.Vector3();
@@ -6677,7 +6799,7 @@ THREE.Matrix4.prototype = {
 			te[ 1 ] = x.y; te[ 5 ] = y.y; te[ 9 ] = z.y;
 			te[ 2 ] = x.z; te[ 6 ] = y.z; te[ 10 ] = z.z;
 
-			return this;
+			return this;	//返回新的Matrix4(4x4矩阵)
 
 		};
 
