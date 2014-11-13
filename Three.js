@@ -2844,6 +2844,7 @@ THREE.Vector3.prototype = {
 
 	/*
 	///applyMatrix4方法乘以该向量和参数m(一个Matrix4投影矩阵)的4x4的子集
+	/// NOTE:applyToVector3Array方法经常用来对三维向量应用某种变换.	
 	*/
 	///<summary>applyMatrix4</summary>
 	///<param name ="m" type="Matrix4">仿射矩阵</param>
@@ -3988,6 +3989,7 @@ THREE.Vector4.prototype = {
 	
 	/*
 	///applyMatrix4方法将当前向量乘以一个4x4的矩阵,参数m(一个Matrix4的矩阵)
+	/// NOTE:applyToVector3Array方法经常用来对四维向量应用某种变换.	
 	*/
 	///<summary>applyMatrix4</summary>
 	///<param name ="m" type="Matrix4">4x4矩阵</param>
@@ -6062,9 +6064,9 @@ THREE.Matrix3.prototype = {
 
 	/*
 	///applyToVector3Array方法用来将数组a和一个Vector3(三维向量)相乘.并返回新的数组对象.
-	/// NOTE:multiplyVector3Array方法经常用来应用某种变换.参数offset和参数length可以省略.
+	/// NOTE:applyToVector3Array方法经常用来应用某种变换.参数offset和参数length可以省略.
 	*/
-	///<summary>multiplyVector3Array</summary>
+	///<summary>applyToVector3Array</summary>
 	///<param name ="array" type="Array">数组对象</param>
 	///<param name ="offset" type="Number">偏移量,可以省略,如果省略为0.</param>
 	///<param name ="length" type="Number">长度,可以省略,如果省略值为数组长度</param>
@@ -6118,7 +6120,7 @@ THREE.Matrix3.prototype = {
 	},
 
 	/*
-	///determinant方法用来将Matrix3(3x3矩阵)的行列式
+	///determinant方法用来获得Matrix3(3x3矩阵)的行列式
 	/// NOTE:通过求解行列式值的方式来判断矩阵的逆矩阵是否存在(行列式的值不等于0,表示该矩阵有逆矩阵).
 	*/
 	///<summary>determinant</summary>
@@ -6139,7 +6141,7 @@ THREE.Matrix3.prototype = {
 	///getInverse方法用来获得Matrix3(3x3矩阵)的逆矩阵.
 	/// NOTE:逆矩阵与当前矩阵相乘得到单位矩阵.
 	*/
-	///<summary>multiplyScalar</summary>
+	///<summary>getInverse</summary>
 	///<param name ="matrix" type="Matrix4">THREE.Matrix4</param>
 	///<param name ="throwOnInvertible" type="Number">异常标志</param>
 	///<returns type="Matrix3">返回Matrix3(3x3矩阵)的逆矩阵.</returns>
@@ -6227,7 +6229,7 @@ THREE.Matrix3.prototype = {
 	///				| 7 8 9 |
 	///				--     --
 	*/
-	///<summary>multiplyScalar</summary>
+	///<summary>flattenToArrayOffset</summary>
 	///<param name ="array" type="Array">Array数组对象</param>
 	///<param name ="offset" type="Number">偏移量</param>
 	///<returns type="Matrix3">返回包含矩阵元素的数组</returns>
@@ -6805,25 +6807,42 @@ THREE.Matrix4.prototype = {
 
 	}(),
 
+	/*
+	///multiply方法用来将当前Matrix4(4x4矩阵)与参数m相乘.并返回新的Matrix4(4x4矩阵)
+	/// NOTE:这里只接受一个参数,如果传递两个参数请使用.multiplyMatrices( a, b )方法替代,如果有两个参数会自动调用.multiplyMatrices( a, b )方法
+	*/
+	///<summary>multiply</summary>
+	///<param name ="m" type="Matrix4(4x4矩阵)">与当前对象元素值相乘的Matrix4(4x4矩阵)</param>
+	///<param name ="n" type="Matrix4(4x4矩阵)">判断是否有第二个参数w,如果有的话,调用.multiplyMatrices()方法</param>
+	///<returns type="Matrix4(4x4矩阵)">返回新的Matrix4(4x4矩阵)</returns>
 	multiply: function ( m, n ) {
 
-		if ( n !== undefined ) {
+		if ( n !== undefined ) {	//判断是否有第二个参数w,如果有的话,调用.multiplyMatrices()方法
 
+			// NOTE:这里只接受一个参数,如果传递两个参数请使用.multiplyMatrices( a, b )方法替代,
 			console.warn( 'THREE.Matrix4: .multiply() now only accepts one argument. Use .multiplyMatrices( a, b ) instead.' );
-			return this.multiplyMatrices( m, n );
+			return this.multiplyMatrices( m, n );	//调用.multiplyMatrices()方法,返回新的Matrix4(4x4矩阵),矩阵m和矩阵n相乘
 
 		}
 
-		return this.multiplyMatrices( this, m );
+		return this.multiplyMatrices( this, m );	//调用.multiplyMatrices()方法,返回新的Matrix4(4x4矩阵),当前矩阵和矩阵m相乘
 
 	},
 
+	/*
+	///multiply方法用来将矩阵a,b相乘,并返回新的Matrix4(4x4矩阵).
+	*/
+	///<summary>multiplyMatrices</summary>
+	///<param name ="a" type="Matrix4(4x4矩阵)">Matrix4(4x4矩阵)</param>
+	///<param name ="b" type="Matrix4(4x4矩阵)">Matrix4(4x4矩阵)</param>
+	///<returns type="Matrix4(4x4矩阵)">返回新的Matrix4(4x4矩阵)</returns>
 	multiplyMatrices: function ( a, b ) {
 
 		var ae = a.elements;
 		var be = b.elements;
 		var te = this.elements;
 
+		//将矩阵a,b相乘.
 		var a11 = ae[ 0 ], a12 = ae[ 4 ], a13 = ae[ 8 ], a14 = ae[ 12 ];
 		var a21 = ae[ 1 ], a22 = ae[ 5 ], a23 = ae[ 9 ], a24 = ae[ 13 ];
 		var a31 = ae[ 2 ], a32 = ae[ 6 ], a33 = ae[ 10 ], a34 = ae[ 14 ];
@@ -6854,25 +6873,42 @@ THREE.Matrix4.prototype = {
 		te[ 11 ] = a41 * b13 + a42 * b23 + a43 * b33 + a44 * b43;
 		te[ 15 ] = a41 * b14 + a42 * b24 + a43 * b34 + a44 * b44;
 
-		return this;
+		return this;	//返回新的Matrix4(4x4矩阵)
 
 	},
 
+	/*
+	///multiply方法用来将矩阵a,b相乘,并返回新Matrix4(4x4矩阵)赋值给数组对象r
+	*/
+	///<summary>multiplyMatrices</summary>
+	///<param name ="a" type="Matrix4(4x4矩阵)">Matrix4(4x4矩阵)</param>
+	///<param name ="b" type="Matrix4(4x4矩阵)">Matrix4(4x4矩阵)</param>
+	///<param name ="r" type="Array">数组对象</param>
+	///<returns type="Array">返回新Matrix4(4x4矩阵)</returns>
 	multiplyToArray: function ( a, b, r ) {
 
 		var te = this.elements;
 
-		this.multiplyMatrices( a, b );
+		this.multiplyMatrices( a, b );	//矩阵a,b相乘
 
+		//新Matrix4(4x4矩阵)赋值给数组对象
 		r[ 0 ] = te[ 0 ]; r[ 1 ] = te[ 1 ]; r[ 2 ] = te[ 2 ]; r[ 3 ] = te[ 3 ];
 		r[ 4 ] = te[ 4 ]; r[ 5 ] = te[ 5 ]; r[ 6 ] = te[ 6 ]; r[ 7 ] = te[ 7 ];
 		r[ 8 ]  = te[ 8 ]; r[ 9 ]  = te[ 9 ]; r[ 10 ] = te[ 10 ]; r[ 11 ] = te[ 11 ];
 		r[ 12 ] = te[ 12 ]; r[ 13 ] = te[ 13 ]; r[ 14 ] = te[ 14 ]; r[ 15 ] = te[ 15 ];
 
-		return this;
+		return this;	//返回新Matrix4(4x4矩阵)
 
 	},
 
+
+	/*
+	///multiplyScalar方法用来将Matrix4(4x4矩阵)的元素直接与参数s相乘.并返回新的Matrix4(4x4矩阵).
+	/// NOTE:这里传递的参数s是一个标量.
+	*/
+	///<summary>multiplyScalar</summary>
+	///<param name ="s" type="number">与当前Matrix4(4x4矩阵)对象的值相乘的标量,数值</param>
+	///<returns type="Matrix4">返回新的Matrix4(4x4矩阵)</returns>
 	multiplyScalar: function ( s ) {
 
 		var te = this.elements;
@@ -6882,31 +6918,69 @@ THREE.Matrix4.prototype = {
 		te[ 2 ] *= s; te[ 6 ] *= s; te[ 10 ] *= s; te[ 14 ] *= s;
 		te[ 3 ] *= s; te[ 7 ] *= s; te[ 11 ] *= s; te[ 15 ] *= s;
 
-		return this;
+		return this;	//返回新的Matrix4(4x4矩阵)
 
 	},
 
+	/*
+	///multiplyVector3方法用来将3x3矩阵和一个Vector3(三维向量)相乘.并返回新Matrix4(4x4矩阵)对象.
+	/// NOTE:multiplyVector3方法已经被删除使用vector.applyMatrix4( matrix )方法替换,这里保留是为了向下兼容.
+	/// NOTE:multiplyVector3方法经常用来应用某种变换.
+	*/
+	///<summary>multiplyVector3</summary>
+	///<param name ="vector" type="Vector3">三维向量</param>
+	///<returns type="Matrix4">并返回新的Matrix4(4x4矩阵)对象</returns>
 	multiplyVector3: function ( vector ) {
 
+	// 提示用户multiplyVector3方法已经被删除使用vector.applyMatrix4( matrix )方法替换,这里保留是为了向下兼容.
 		console.warn( 'THREE.Matrix4: .multiplyVector3() has been removed. Use vector.applyMatrix4( matrix ) or vector.applyProjection( matrix ) instead.' );
-		return vector.applyProjection( this );
+		return vector.applyProjection( this );	//并返回新的Matrix4(4x4矩阵)对象
 
 	},
 
+	/*
+	///multiplyVector4方法用来将3x3矩阵和一个Vector4(四维向量)相乘.并返回新Matrix4(4x4矩阵)对象.
+	/// NOTE:multiplyVector4方法已经被删除使用vector.applyMatrix4( matrix )方法替换,这里保留是为了向下兼容.
+	/// NOTE:multiplyVector4方法经常用来应用某种变换.
+	*/
+	///<summary>multiplyVector4</summary>
+	///<param name ="vector" type="Vector4">四维向量</param>
+	///<returns type="Matrix4">并返回新的Matrix4(4x4矩阵)对象</returns>
 	multiplyVector4: function ( vector ) {
-
+	
+		// 提示用户multiplyVector4方法已经被删除使用vector.applyMatrix4( matrix )方法替换,这里保留是为了向下兼容.
 		console.warn( 'THREE.Matrix4: .multiplyVector4() has been removed. Use vector.applyMatrix4( matrix ) instead.' );
-		return vector.applyMatrix4( this );
+		return vector.applyMatrix4( this );	//并返回新的Matrix4(4x4矩阵)对象
 
 	},
 
+	/*
+	///multiplyVector3Array方法用来将数组a和一个Vector3(三维向量)相乘.并返回新的数组对象.
+	/// NOTE:multiplyVector3Array方法已经被删除使用matrix.applyToVector3Array( array )方法替换,这里保留是为了向下兼容.
+	/// NOTE:multiplyVector3Array方法经常用来应用某种变换.
+	*/
+	///<summary>multiplyVector3Array</summary>
+	///<param name ="a" type="Array">数组对象</param>
+	///<returns type="Array">并返回新的数组对象</returns>
 	multiplyVector3Array: function ( a ) {
 
+		// 提示用户multiplyVector3Array方法已经被删除使用matrix.applyToVector3Array( array )方法替换,这里保留是为了向下兼容.
 		console.warn( 'THREE.Matrix4: .multiplyVector3Array() has been renamed. Use matrix.applyToVector3Array( array ) instead.' );
-		return this.applyToVector3Array( a );
+		return this.applyToVector3Array( a );	//并返回新的Matrix4(4x4矩阵)对象
 
 	},
 
+
+	/*
+	///applyToVector3Array方法用来将当前矩阵应用到一个三维向量,并将结果转换成一个数组,返回数组对象.
+	/// NOTE:applyToVector3Array方法经常用来对三维向量应用某种变换.	参数offset,length用来对不同长度的数组应用变换.
+	///
+	*/
+	///<summary>applyMatrix4</summary>
+	///<param name ="array" type="Array">数组对象</param>
+	///<param name ="offset" type="Number">偏移量</param>
+	///<param name ="length" type="Number">长度</param>
+	///<returns type="Array">并返回新的数组对象</returns>
 	applyToVector3Array: function () {
 
 		var v1 = new THREE.Vector3();
@@ -6922,7 +6996,7 @@ THREE.Matrix4.prototype = {
 				v1.y = array[ j + 1 ];
 				v1.z = array[ j + 2 ];
 
-				v1.applyMatrix4( this );
+				v1.applyMatrix4( this );	
 
 				array[ j ]     = v1.x;
 				array[ j + 1 ] = v1.y;
@@ -6930,27 +7004,61 @@ THREE.Matrix4.prototype = {
 
 			}
 
-			return array;
+			return array;	//并返回新的数组对象
 
 		};
 
 	}(),
 
+
+	/*
+	///rotateAxis方法对参数v三维向量的应用一个旋转变换
+	/// NOTE:rotateAxis方法已经被删除使用Vector3.transformDirection( matrix )方法替换,这里保留是为了向下兼容.
+	*/
+	///<summary>rotateAxis</summary>
+	///<param name ="v" type="Vector3">仿射矩阵</param>
+	///<returns type="Vector3">返回新坐标值的三维向量</returns>
 	rotateAxis: function ( v ) {
 
+		//提示用户rotateAxis方法已经被删除使用Vector3.transformDirection( matrix )方法替换,这里保留是为了向下兼容.
 		console.warn( 'THREE.Matrix4: .rotateAxis() has been removed. Use Vector3.transformDirection( matrix ) instead.' );
 
-		v.transformDirection( this );
+		v.transformDirection( this );	//调用Vector3.transformDirection( matrix ) 方法,对向量应用旋转变换
 
 	},
 
+
+	/*crossVector方法
+	///crossVector方法将返回两个交叉乘积,调用者变为a，b的叉乘。叉乘是一个向量，垂直于参与叉乘的两个向量并呈右手螺旋法则。
+	/// 返回为同时垂直于两个参数向量的向量，方向可朝上也可朝下，由两向量夹角的方向决定。
+	/// NOTE:crossVector方法已经被删除使用vector.applyMatrix4( matrix )方法替换,这里保留是为了向下兼容.
+	/// NOTE:借助右手定则辅助判断方向。参考:http://zh.wikipedia.org/zh/%E5%90%91%E9%87%8F%E7%A7%AF
+	/// 叉乘是一种在向量空间中向量的二元运算。与点乘不同，它的运算结果是一个伪向量而不是一个标量。
+	/// 叉乘的运算结果叫叉积（即交叉乘积）、外积或向量积。叉积与原来的两个向量都垂直。
+		 1、理论知识
+		   数学上的定义：c=axb【注：粗体小写字母表示向量】其中a,b,c均为向量。即两个向量的叉积得到的还是向量！
+		   性质1：c⊥a，c⊥b，即向量c垂直与向量a,b所在的平面。
+		   性质2：模长|c|=|a||b|sin<a,b>
+		   性质3：满足右手法则。从这点我们有axb ≠ bxa，而axb = - bxa。所以我们可以使用叉积的正负值来判断向量a，b的相对位置，
+		   		  即向量b是处于向量a的顺时针方向还是逆时针方向。
+	*/
+	///<summary>crossVector</summary>
+	///<param name ="vector" type="Vector3">三维向量</param>
+	///<returns type="Vector3">三维向量</returns>	
 	crossVector: function ( vector ) {
 
+		//提示用户crossVector方法已经被删除使用vector.applyMatrix4( matrix )方法替换,这里保留是为了向下兼容.
 		console.warn( 'THREE.Matrix4: .crossVector() has been removed. Use vector.applyMatrix4( matrix ) instead.' );
-		return vector.applyMatrix4( this );
+		return vector.applyMatrix4( this );	//调用Vector3.applyMatrix4( matrix ) 方法,返回参数vector和当前矩阵的差乘.
 
 	},
 
+	/*
+	///determinant方法用来获得Matrix4(4x4矩阵)的行列式
+	/// NOTE:通过求解行列式值的方式来判断矩阵的逆矩阵是否存在(行列式的值不等于0,表示该矩阵有逆矩阵).
+	*/
+	///<summary>determinant</summary>
+	///<returns type="Number">返回Matrix4(4x4矩阵)的四阶行列式</returns>
 	determinant: function () {
 
 		var te = this.elements;
@@ -6995,12 +7103,25 @@ THREE.Matrix4.prototype = {
 				 + n13 * n21 * n32
 				 - n12 * n21 * n33
 				 + n12 * n23 * n31
-			)
+			)	//返回Matrix4(4x4矩阵)的四阶行列式
 
 		);
 
 	},
 
+	/*
+	///transpose方法用来获得Matrix4(4x4矩阵)的转置矩阵.
+	/// NOTE:一个mxn的矩阵的转置矩阵式nxm矩阵,就是矩阵的行和列交换.
+	/// 	例如:
+	///			 
+	///				--     -- 		--     -- T
+	///				| 1 2 3 |		| 1 4 7 |
+	///	matrix A =	| 4 5 6 |  = 	| 2 5 8 |
+	///				| 7 8 9 |		| 3 6 9 |
+	///				--     --		--     --
+	*/
+	///<summary>transpose</summary>
+	///<returns type="Matrix4">返回Matrix4(4x4矩阵)的转置矩阵.</returns>
 	transpose: function () {
 
 		var te = this.elements;
@@ -7014,10 +7135,23 @@ THREE.Matrix4.prototype = {
 		tmp = te[ 7 ]; te[ 7 ] = te[ 13 ]; te[ 13 ] = tmp;
 		tmp = te[ 11 ]; te[ 11 ] = te[ 14 ]; te[ 14 ] = tmp;
 
-		return this;
+		return this;	//返回Matrix4(4x4矩阵)的转置矩阵.
 
 	},
 
+	/*
+	///flattenToArrayOffset方法通过参数offset指定偏移量,将矩阵展开到数组(参数array)中,返回新的数组.
+	/// NOTE:flattenToArrayOffset方法可以用在将3x3矩阵变换成4x4矩阵中.
+	///				--     --
+	///				| 1 2 3 |
+	///	matrix A =	| 4 5 6 |  => flattenToArrayOffset(arrary,3) => array(0,0,0,0,1,2,3,0,0,0,0,4,5,6,0,0,0,0,7,8,9)
+	///				| 7 8 9 |
+	///				--     --
+	*/
+	///<summary>flattenToArrayOffset</summary>
+	///<param name ="array" type="Array">Array数组对象</param>
+	///<param name ="offset" type="Number">偏移量</param>
+	///<returns type="Matrix4">返回包含矩阵元素的数组</returns>
 	flattenToArrayOffset: function ( array, offset ) {
 
 		var te = this.elements;
@@ -7042,10 +7176,16 @@ THREE.Matrix4.prototype = {
 		array[ offset + 14 ] = te[ 14 ];
 		array[ offset + 15 ] = te[ 15 ];
 
-		return array;
+		return array;	//返回包含矩阵元素的数组
 
 	},
 
+	/*
+	///getPosition方法将当前矩阵中代表位置的元素值设置给三维向量
+	/// NOTE:getPosition方法已经被删除使用vector.setFromMatrixPosition( matrix )方法替换,这里保留是为了向下兼容.
+	*/
+	///<summary>getPosition</summary>
+	///<returns type="Vector3">返回三维向量</returns>
 	getPosition: function () {
 
 		var v1 = new THREE.Vector3();
@@ -7055,12 +7195,18 @@ THREE.Matrix4.prototype = {
 			console.warn( 'THREE.Matrix4: .getPosition() has been removed. Use Vector3.setFromMatrixPosition( matrix ) instead.' );
 
 			var te = this.elements;
-			return v1.set( te[ 12 ], te[ 13 ], te[ 14 ] );
+			return v1.set( te[ 12 ], te[ 13 ], te[ 14 ] );	//返回三维向量
 
 		};
 
 	}(),
 
+	/*
+	///setPosition方法将当前矩阵中代表位置的元素值设置给三维向量
+	*/
+	///<summary>setPosition</summary>
+	///<param name ="v" type="Vector3">偏移量</param>
+	///<returns type="Matrix4">返回新的Matrix4(4x4矩阵)</returns>
 	setPosition: function ( v ) {
 
 		var te = this.elements;
@@ -7069,10 +7215,18 @@ THREE.Matrix4.prototype = {
 		te[ 13 ] = v.y;
 		te[ 14 ] = v.z;
 
-		return this;
+		return this;	//返回新的Matrix4(4x4矩阵)
 
 	},
 
+	/*
+	///getInverse方法用来获得Matrix4(4x4矩阵)的逆矩阵.
+	/// NOTE:逆矩阵与当前矩阵相乘得到单位矩阵.
+	*/
+	///<summary>multiplyScalar</summary>
+	///<param name ="matrix" type="Matrix4">THREE.Matrix4</param>
+	///<param name ="throwOnInvertible" type="Number">异常标志</param>
+	///<returns type="Matrix4">返回Matrix4(4x4矩阵)的逆矩阵.</returns>
 	getInverse: function ( m, throwOnInvertible ) {
 
 		// based on http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm
@@ -7101,11 +7255,12 @@ THREE.Matrix4.prototype = {
 		te[ 11 ] = n13 * n22 * n41 - n12 * n23 * n41 - n13 * n21 * n42 + n11 * n23 * n42 + n12 * n21 * n43 - n11 * n22 * n43;
 		te[ 15 ] = n12 * n23 * n31 - n13 * n22 * n31 + n13 * n21 * n32 - n11 * n23 * n32 - n12 * n21 * n33 + n11 * n22 * n33;
 
-		var det = n11 * te[ 0 ] + n21 * te[ 4 ] + n31 * te[ 8 ] + n41 * te[ 12 ];
+		var det = n11 * te[ 0 ] + n21 * te[ 4 ] + n31 * te[ 8 ] + n41 * te[ 12 ];	//获得参数matrix行列式的值
 
-		if ( det == 0 ) {
+		if ( det == 0 ) {		// 没有逆矩阵
 
-			var msg = "Matrix4.getInverse(): can't invert matrix, determinant is 0";
+
+			var msg = "Matrix4.getInverse(): can't invert matrix, determinant is 0";	//提示用户该矩阵没有逆矩阵
 
 			if ( throwOnInvertible || false ) {
 
@@ -7117,47 +7272,89 @@ THREE.Matrix4.prototype = {
 
 			}
 
-			this.identity();
+			this.identity();	//获得一个单位矩阵
 
-			return this;
+			return this;	//返回单位矩阵
 		}
 
-		this.multiplyScalar( 1 / det );
+		this.multiplyScalar( 1 / det );	//除以行列式得到逆矩阵
 
-		return this;
+		return this;	//返回Matrix4(4x4矩阵)的逆矩阵.
 
 	},
 
+	/*
+	///translate方法用来变换Matrix4(4x4矩阵).
+	/// NOTE:translate方法已经删除.
+	*/
+	///<summary>translate</summary>
+	///<param name ="v" type="Vector3">THREE.Vecter3</param>
+	///<returns type="Matrix4">返回带有新位置信息的Matrix4(4x4矩阵).</returns>
 	translate: function ( v ) {
-
+		//提示用户translate()方法已经删除.
 		console.warn( 'THREE.Matrix4: .translate() has been removed.' );
 
 	},
 
+	/*
+	///rotateX方法用来变换Matrix4(4x4矩阵)的x轴.
+	/// NOTE:rotateX方法已经删除.
+	*/
+	///<summary>rotateX</summary>
+	///<param name ="angle" type="Number">角度</param>
+	///<returns type="Matrix4">返回带有新的Matrix4(4x4矩阵).</returns>
 	rotateX: function ( angle ) {
-
+		//提示用户rotateX()方法已经删除.
 		console.warn( 'THREE.Matrix4: .rotateX() has been removed.' );
 
 	},
 
+	/*
+	///rotateY方法用来变换Matrix4(4x4矩阵)的Y轴.
+	/// NOTE:rotateX方法已经删除.
+	*/
+	///<summary>rotateY</summary>
+	///<param name ="angle" type="Number">角度</param>
+	///<returns type="Matrix4">返回带有新的Matrix4(4x4矩阵).</returns>
 	rotateY: function ( angle ) {
-
+		//提示用户rotateY()方法已经删除.
 		console.warn( 'THREE.Matrix4: .rotateY() has been removed.' );
 
 	},
 
+	/*
+	///rotateZ方法用来变换Matrix4(4x4矩阵)的Z轴.
+	/// NOTE:rotateZ方法已经删除.
+	*/
+	///<summary>rotateZ</summary>
+	///<param name ="angle" type="Number">角度</param>
+	///<returns type="Matrix4">返回带有新的Matrix4(4x4矩阵).</returns>
 	rotateZ: function ( angle ) {
-
+		//提示用户rotateZ()方法已经删除.
 		console.warn( 'THREE.Matrix4: .rotateZ() has been removed.' );
 
 	},
 
+	/*
+	///rotateByAxis方法用来变换Matrix4(4x4矩阵)的任意轴.
+	/// NOTE:rotateByAxis方法已经删除.
+	*/
+	///<summary>rotateByAxis</summary>
+	///<param name ="axis" type="Vector3">任意轴</param>
+	///<param name ="angle" type="Number">角度</param>
+	///<returns type="Matrix4">返回带有新的Matrix4(4x4矩阵).</returns>
 	rotateByAxis: function ( axis, angle ) {
-
+		//提示用户rotateByAxis()方法已经删除.
 		console.warn( 'THREE.Matrix4: .rotateByAxis() has been removed.' );
 
 	},
 
+	/*
+	///scale方法通过预先计算比例向量，将指定的比例向量应用到此 Matrix4(4x4矩阵)。 
+	*/
+	///<summary>scale</summary>
+	///<param name ="v" type="Vector3">比例向量Vector3</param>
+	///<returns type="Matrix4">返回新的Matrix4(4x4矩阵).</returns>	
 	scale: function ( v ) {
 
 		var te = this.elements;
@@ -7168,7 +7365,7 @@ THREE.Matrix4.prototype = {
 		te[ 2 ] *= x; te[ 6 ] *= y; te[ 10 ] *= z;
 		te[ 3 ] *= x; te[ 7 ] *= y; te[ 11 ] *= z;
 
-		return this;
+		return this;	//返回新的Matrix4(4x4矩阵).
 
 	},
 
@@ -7184,6 +7381,14 @@ THREE.Matrix4.prototype = {
 
 	},
 
+	/*
+	///makeTranslation方法根据x, y, z生成平移矩阵.
+	*/
+	///<summary>makeTranslation</summary>
+	///<param name ="x" type="Number">x分量</param>
+	///<param name ="y" type="Number">y分量</param>
+	///<param name ="z" type="Number">z分量</param>
+	///<returns type="Matrix4">返回Matrix4(4x4矩阵),平移矩阵.</returns>
 	makeTranslation: function ( x, y, z ) {
 
 		this.set(
@@ -7195,10 +7400,17 @@ THREE.Matrix4.prototype = {
 
 		);
 
-		return this;
+		return this;	//返回Matrix4(4x4矩阵),平移矩阵
 
 	},
 
+	/*
+	///makeRotationX方法生成绕x轴转theta弧度的旋转矩阵
+	/// TODO:这里是弧度还是角度,有待确认.
+	*/
+	///<summary>makeRotationX</summary>
+	///<param name ="theta" type="Number">弧度</param>
+	///<returns type="Matrix4">返回Matrix4(4x4矩阵),旋转矩阵.</returns>	
 	makeRotationX: function ( theta ) {
 
 		var c = Math.cos( theta ), s = Math.sin( theta );
@@ -7212,10 +7424,17 @@ THREE.Matrix4.prototype = {
 
 		);
 
-		return this;
+		return this;	//返回Matrix4(4x4矩阵),旋转矩阵.
 
 	},
 
+	/*
+	///makeRotationY方法生成绕y轴转theta弧度的旋转矩阵
+	/// TODO:这里是弧度还是角度,有待确认.
+	*/
+	///<summary>makeRotationY</summary>
+	///<param name ="theta" type="Number">弧度</param>
+	///<returns type="Matrix4">返回Matrix4(4x4矩阵),旋转矩阵.</returns>	
 	makeRotationY: function ( theta ) {
 
 		var c = Math.cos( theta ), s = Math.sin( theta );
@@ -7229,10 +7448,17 @@ THREE.Matrix4.prototype = {
 
 		);
 
-		return this;
+		return this;	//返回Matrix4(4x4矩阵),旋转矩阵.
 
 	},
 
+	/*
+	///makeRotationZ方法生成绕z轴转theta弧度的旋转矩阵
+	/// TODO:这里是弧度还是角度,有待确认.
+	*/
+	///<summary>makeRotationZ</summary>
+	///<param name ="theta" type="Number">弧度</param>
+	///<returns type="Matrix4">返回Matrix4(4x4矩阵),旋转矩阵.</returns>	
 	makeRotationZ: function ( theta ) {
 
 		var c = Math.cos( theta ), s = Math.sin( theta );
@@ -7246,10 +7472,18 @@ THREE.Matrix4.prototype = {
 
 		);
 
-		return this;
+		return this;	//返回Matrix4(4x4矩阵),旋转矩阵.
 
 	},
 
+	/*
+	///makeRotationAxis方法生成绕任意轴转angle弧度的旋转矩阵
+	/// TODO:这里是弧度还是角度,有待确认.
+	*/
+	///<summary>makeRotationAxis</summary>
+	///<param name ="axis" type="Vector3"> 转轴向量(axis必须是单位向量)</param>
+	///<param name ="theta" type="Number">弧度</param>
+	///<returns type="Matrix4">返回Matrix4(4x4矩阵),旋转矩阵.</returns>	
 	makeRotationAxis: function ( axis, angle ) {
 
 		// Based on http://www.gamedev.net/reference/articles/article1199.asp
@@ -7269,10 +7503,18 @@ THREE.Matrix4.prototype = {
 
 		);
 
-		 return this;
+		 return this;	//返回Matrix4(4x4矩阵),旋转矩阵.
 
 	},
 
+	/*
+	///makeScale方法根据x, y, z生成缩放矩阵.
+	*/
+	///<summary>makeScale</summary>
+	///<param name ="x" type="Number">x分量</param>
+	///<param name ="y" type="Number">y分量</param>
+	///<param name ="z" type="Number">z分量</param>
+	///<returns type="Matrix4">返回Matrix4(4x4矩阵),缩放矩阵.</returns>
 	makeScale: function ( x, y, z ) {
 
 		this.set(
@@ -7284,20 +7526,36 @@ THREE.Matrix4.prototype = {
 
 		);
 
-		return this;
+		return this;	//返回Matrix4(4x4矩阵),缩放矩阵.
 
 	},
 
+	/*
+	///compose方法设置变换矩阵的平移、旋转和缩放设置
+	*/
+	///<summary>compose</summary>
+	///<param name ="position" type="Vector3">平移向量</param>
+	///<param name ="quaternion" type="Vector3">旋转向量</param>
+	///<param name ="scale" type="Vector3">缩放向量</param>
+	///<returns type="Matrix4">返回Matrix4(4x4矩阵),变换矩阵.</returns>
 	compose: function ( position, quaternion, scale ) {
 
 		this.makeRotationFromQuaternion( quaternion );
 		this.scale( scale );
 		this.setPosition( position );
 
-		return this;
+		return this;	//返回Matrix4(4x4矩阵),变换矩阵.
 
 	},
 
+	/*
+	///decompose方法将转换矩阵的平移、旋转和缩放设置作为由三个 Vector3 对象组成的矢量返回。第一个 Vector3 对象容纳平移元素。第二个 Vector3 对象容纳旋转元素。第三个 Vector3 对象容纳缩放元素。 
+	*/
+	///<summary>decompose</summary>
+	///<param name ="position" type="Vector3">平移向量</param>
+	///<param name ="quaternion" type="Vector3">旋转向量</param>
+	///<param name ="scale" type="Vector3">缩放向量</param>
+	///<returns type="Matrix4">返回Matrix4(4x4矩阵),变换矩阵.</returns>
 	decompose: function () {
 
 		var vector = new THREE.Vector3();
@@ -7312,6 +7570,7 @@ THREE.Matrix4.prototype = {
 			var sz = vector.set( te[ 8 ], te[ 9 ], te[ 10 ] ).length();
 
 			// if determine is negative, we need to invert one scale
+			// 如果行列式是负数,把比例转换成正数
 			var det = this.determinant();
 			if ( det < 0 ) {
 				sx = - sx;
@@ -7322,8 +7581,10 @@ THREE.Matrix4.prototype = {
 			position.z = te[ 14 ];
 
 			// scale the rotation part
+			// 缩放有关旋转的元素
 
 			matrix.elements.set( this.elements ); // at this point matrix is incomplete so we can't use .copy()
+												  //这个表示点的矩阵是不完整的,我们不能使用copy()方法
 
 			var invSX = 1 / sx;
 			var invSY = 1 / sy;
@@ -7347,7 +7608,7 @@ THREE.Matrix4.prototype = {
 			scale.y = sy;
 			scale.z = sz;
 
-			return this;
+			return this;	//返回Matrix4(4x4矩阵),变换矩阵
 
 		};
 
