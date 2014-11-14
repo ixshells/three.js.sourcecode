@@ -7614,6 +7614,17 @@ THREE.Matrix4.prototype = {
 
 	}(),
 
+	/*
+	///makeFrustum方法根据left, right, bottom, top, near, far生成透视投影矩阵,Frustum平截头体
+	*/
+	///<summary>makeFrustum</summary>
+	///<param name ="left" type="Number">指明相对于垂直平面的左侧坐标位置</param>
+	///<param name ="right" type="Number">指明相对于垂直平面的右侧坐标位置</param>
+	///<param name ="bottom" type="Number">指明相对于垂直平面的底部坐标位置</param>
+	///<param name ="top" type="Number">指明相对于垂直平面的顶部坐标位置</param>
+	///<param name ="near" type="Number">指明相对于深度剪切面的近的距离，必须为正数</param>
+	///<param name ="far" type="Number">指明相对于深度剪切面的远的距离，必须为正数</param>
+	///<returns type="Matrix4">返回Matrix4(4x4矩阵),透视投影矩阵.</returns>
 	makeFrustum: function ( left, right, bottom, top, near, far ) {
 
 		var te = this.elements;
@@ -7630,10 +7641,19 @@ THREE.Matrix4.prototype = {
 		te[ 2 ] = 0;	te[ 6 ] = 0;	te[ 10 ] = c;	te[ 14 ] = d;
 		te[ 3 ] = 0;	te[ 7 ] = 0;	te[ 11 ] = - 1;	te[ 15 ] = 0;
 
-		return this;
+		return this;	//返回Matrix4(4x4矩阵),透视投影矩阵
 
 	},
 
+	/*
+	///makePerspective方法根据 fov, aspect, near, far 生成透视投影矩阵,对makeFrustu()方法的封装,适配人们习惯的表达方式.
+	*/
+	///<summary>makePerspective</summary>
+	///<param name ="fov" type="Number">指明相机的可视角度</param>
+	///<param name ="aspect" type="Number">指明相机可视范围的长宽比</param>
+	///<param name ="near" type="Number">指明相对于深度剪切面的近的距离，必须为正数</param>
+	///<param name ="far" type="Number">指明相对于深度剪切面的远的距离，必须为正数</param>
+	///<returns type="Matrix4">返回Matrix4(4x4矩阵),透视投影矩阵.</returns>
 	makePerspective: function ( fov, aspect, near, far ) {
 
 		var ymax = near * Math.tan( THREE.Math.degToRad( fov * 0.5 ) );
@@ -7641,10 +7661,21 @@ THREE.Matrix4.prototype = {
 		var xmin = ymin * aspect;
 		var xmax = ymax * aspect;
 
-		return this.makeFrustum( xmin, xmax, ymin, ymax, near, far );
+		return this.makeFrustum( xmin, xmax, ymin, ymax, near, far );	//调用makeFrustum()方法,返回透视投影矩阵.
 
 	},
 
+	/*
+	///makeOrthographic方法根据  left, right, top, bottom, near, far 生成正交矩阵.
+	*/
+	///<summary>makePerspective</summary>
+	///<param name ="left" type="Number">指明相对于垂直平面的左侧坐标位置</param>
+	///<param name ="right" type="Number">指明相对于垂直平面的右侧坐标位置</param>
+	///<param name ="bottom" type="Number">指明相对于垂直平面的底部坐标位置</param>
+	///<param name ="top" type="Number">指明相对于垂直平面的顶部坐标位置</param>
+	///<param name ="near" type="Number">指明相对于深度剪切面的近的距离，必须为正数</param>
+	///<param name ="far" type="Number">指明相对于深度剪切面的远的距离，必须为正数</param>
+	///<returns type="Matrix4">返回Matrix4(4x4矩阵),正交投影矩阵.</returns>
 	makeOrthographic: function ( left, right, top, bottom, near, far ) {
 
 		var te = this.elements;
@@ -7661,18 +7692,29 @@ THREE.Matrix4.prototype = {
 		te[ 2 ] = 0;	te[ 6 ] = 0;	te[ 10 ] = - 2 / p;	te[ 14 ] = - z;
 		te[ 3 ] = 0;	te[ 7 ] = 0;	te[ 11 ] = 0;	te[ 15 ] = 1;
 
-		return this;
+		return this;	//返回Matrix4(4x4矩阵),正交投影矩阵.
 
 	},
 
+	/*fromArray方法
+	///fromArray方法将存储Matrix4(4x4矩阵)元素值的数组赋值给当前Matrix4(4x4矩阵)对象
+	*/
+	///<summary>fromArray</summary>
+	///<param name ="array" type="Array">Matrix4(4x4矩阵)元素值的数组array</param>
+	///<returns type="Matrix4">返回新的Matrix4(4x4矩阵)</returns>	
 	fromArray: function ( array ) {
 
-		this.elements.set( array );
+		this.elements.set( array );		//调用set方法,将数组赋值给当前Matrix4(4x4矩阵)对象
 
-		return this;
+		return this;	//返回新的Matrix4(4x4矩阵)
 
 	},
 
+	/*toArray方法
+	///toArray方法将当前Matrix4(4x4矩阵)的元素值赋值给数组array.返回一个数组对象.
+	*/
+	///<summary>toArray</summary>
+	///<returns type="Array">返回含有Matrix4(4x4矩阵)元素值的数组array</returns>	
 	toArray: function () {
 
 		var te = this.elements;
@@ -7682,10 +7724,15 @@ THREE.Matrix4.prototype = {
 			te[ 4 ], te[ 5 ], te[ 6 ], te[ 7 ],
 			te[ 8 ], te[ 9 ], te[ 10 ], te[ 11 ],
 			te[ 12 ], te[ 13 ], te[ 14 ], te[ 15 ]
-		];
+		];									//返回含有Matrix4(4x4矩阵)元素值的数组array
 
 	},
 
+	/*clone方法
+	///clone方法克隆一个Matrix4(4x4矩阵)对象.
+	*/
+	///<summary>clone</summary>
+	///<returns type="Matrix4(4x4矩阵)">返回克隆的Matrix4(4x4矩阵)对象</returns>	
 	clone: function () {
 
 		var te = this.elements;
@@ -7697,7 +7744,7 @@ THREE.Matrix4.prototype = {
 			te[ 2 ], te[ 6 ], te[ 10 ], te[ 14 ],
 			te[ 3 ], te[ 7 ], te[ 11 ], te[ 15 ]
 
-		);
+		);		//返回克隆的Matrix4(4x4矩阵)对象
 
 	}
 
