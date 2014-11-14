@@ -1815,7 +1815,7 @@ THREE.Vector2 = function ( x, y ) {
 
 THREE.Vector2.prototype = {
 
-	constructor: THREE.Vector2,	//构造器
+	constructor: THREE.Vector2,	//构造器,返回对创建此对象的Vector2函数的引用
 
 	/*
 	///set方法用来从新设置二维向量的x,y坐标值.并返回新的坐标值的二维向量.
@@ -2485,7 +2485,7 @@ THREE.Vector3 = function ( x, y, z ) {
 
 THREE.Vector3.prototype = {
 
-	constructor: THREE.Vector3,	//构造器
+	constructor: THREE.Vector3,	//构造器,返回对创建此对象的Vector3函数的引用
 
 	/*
 	///set方法用来从新设置三维向量的x,y,z坐标值.并返回新的坐标值的三维向量.
@@ -3714,7 +3714,7 @@ THREE.Vector4 = function ( x, y, z, w ) {
 
 THREE.Vector4.prototype = {
 
-	constructor: THREE.Vector4,	//构造器
+	constructor: THREE.Vector4,	//构造器,返回对创建此对象的Vector4函数的引用
 
 	/*
 	///set方法用来从新设置四维向量的x,y,z,w坐标值.并返回新的坐标值的四维向量.
@@ -4721,7 +4721,7 @@ THREE.Euler.DefaultOrder = 'XYZ';	//默认的旋转顺序为'XYZ'
 
 THREE.Euler.prototype = {
 
-	constructor: THREE.Euler, //构造器
+	constructor: THREE.Euler, //构造器,返回对创建此对象的Euler函数的引用
 
 	_x: 0, _y: 0, _z: 0, _order: THREE.Euler.DefaultOrder,	//将(_x,_y,_z,_order)初始化x,y,z为0,旋转顺序为默认旋转顺序'XYZ';
 
@@ -5238,7 +5238,7 @@ THREE.Line3 = function ( start, end ) {
 ****************************************/
 THREE.Line3.prototype = {
 
-	constructor: THREE.Line3,		//构造器
+	constructor: THREE.Line3,		//构造器,返回对创建此对象的Line3函数的引用
 
 	/*
 	///set方法用来从新设置三维线段的起始点,结束点,start,end坐标值.并返回新的坐标值的三维线段.
@@ -5447,7 +5447,7 @@ THREE.Box2 = function ( min, max ) {
 
 THREE.Box2.prototype = {
 
-	constructor: THREE.Box2,
+	constructor: THREE.Box2,	//构造器,返回对创建此对象的Box2函数的引用
 
 	set: function ( min, max ) {
 
@@ -5684,7 +5684,7 @@ THREE.Box3 = function ( min, max ) {
 
 THREE.Box3.prototype = {
 
-	constructor: THREE.Box3,
+	constructor: THREE.Box3,	//构造器,返回对创建此对象的Box3函数的引用
 
 	set: function ( min, max ) {
 
@@ -6048,7 +6048,7 @@ THREE.Matrix3 = function ( n11, n12, n13, n21, n22, n23, n31, n32, n33 ) {
 ****************************************/
 THREE.Matrix3.prototype = {
 
-	constructor: THREE.Matrix3,	//构造器
+	constructor: THREE.Matrix3,	//构造器,返回对创建此对象的Matrix3函数的引用
 
 	/*
 	///set方法用来从新设置Matrix3(3x3矩阵)的元素值.并返回新的坐标值的Matrix3(3x3矩阵).
@@ -6506,7 +6506,7 @@ THREE.Matrix4 = function ( n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33
 ****************************************/
 THREE.Matrix4.prototype = {
 
-	constructor: THREE.Matrix4,	//构造器
+	constructor: THREE.Matrix4,	//构造器,返回对创建此对象的Matrix4函数的引用
 
 	/*
 	///set方法用来从新设置Matrix4(4x4矩阵)的元素值.并返回新的坐标值的Matrix4(4x4矩阵).
