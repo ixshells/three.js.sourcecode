@@ -7641,7 +7641,7 @@ THREE.Matrix4.prototype = {
 	},
 
 	/*
-	///decompose方法将转换矩阵的平移、旋转和缩放设置作为由三个 Vector3 对象组成的矢量返回。第一个 Vector3 对象容纳平移元素。第二个 Vector3 对象容纳旋转元素。第三个 Vector3 对象容纳缩放元素。 
+	///decompose方法和compose()方法对应.将转换矩阵的平移、旋转和缩放设置作为由三个 Vector3 对象组成的矢量返回。第一个 Vector3 对象容纳平移元素。第二个 Vector3 对象容纳旋转元素。第三个 Vector3 对象容纳缩放元素。 
 	*/
 	///<summary>decompose</summary>
 	///<param name ="position" type="Vector3">平移向量</param>
