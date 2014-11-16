@@ -5922,10 +5922,17 @@ THREE.Box3.prototype = {
 
 	}(),
 
+	/*
+	///setFromObject方法通过获得参数object的端点重新设置立方体边界的最小值,最大值,min,max坐标值.并返回新的坐标值的立方体边界.
+	*/
+	///<summary>setFromObject</summary>
+	///<param name ="object" type="Object3D">Object3D对象</param>
+	///<returns type="Box3">返回新坐标值的立方体边界</returns>
 	setFromObject: function () {
 
 		// Computes the world-axis-aligned bounding box of an object (including its children),
 		// accounting for both the object's, and childrens', world transforms
+		//变换世界坐标系,通过获取Object3D对象(包括子对象)的端点设置立方体边界
 
 		var v1 = new THREE.Vector3();
 
@@ -5933,9 +5940,10 @@ THREE.Box3.prototype = {
 
 			var scope = this;
 
-			object.updateMatrixWorld( true );
+			object.updateMatrixWorld( true );	//设置全局变换,object以及子对象都应用变换.
+												//TODO: updateMatrixWorld()方法还没细看,
 
-			this.makeEmpty();
+			this.makeEmpty();	//调用Box3.makeEmpty()方法,将立方体边界设置成无穷大.
 
 			object.traverse( function ( node ) {
 
@@ -5949,7 +5957,7 @@ THREE.Box3.prototype = {
 
 						v1.applyMatrix4( node.matrixWorld );
 
-						scope.expandByPoint( v1 );
+						scope.expandByPoint( v1 );	//调用expandByPoint()方法重新设置立方体边界
 
 					}
 
@@ -5957,7 +5965,7 @@ THREE.Box3.prototype = {
 
 			} );
 
-			return this;
+			return this;	//返回新坐标值的立方体边界
 
 		};
 
@@ -6011,7 +6019,7 @@ THREE.Box3.prototype = {
 	/*
 	///center方法用来返回立方体边界的中点
 	*/
-	///<summary>makeEmpty</summary>
+	///<summary>center</summary>
 	///<param name ="optionalTarget" type="Vector3">可选参数,接收返回结果,边界的中点</param>
 	///<returns type="Vector3">返回立方体边界的中点</returns>
 	center: function ( optionalTarget ) {
@@ -6022,9 +6030,9 @@ THREE.Box3.prototype = {
 	},
 
 	/*
-	///center方法用来返回立方体边界尺寸的向量
+	///size方法用来返回立方体边界尺寸的向量
 	*/
-	///<summary>makeEmpty</summary>
+	///<summary>size</summary>
 	///<param name ="optionalTarget" type="Vector3">可选参数,接收返回结果,边界尺寸的向量</param>
 	///<returns type="Vector3">返回立方体边界尺寸的向量</returns>
 	size: function ( optionalTarget ) {
@@ -6206,6 +6214,12 @@ THREE.Box3.prototype = {
 
 	}(),
 
+	/*
+	///getBoundingSphere方法返回当前立方体边界的球形边界(这里应该内切于立方体边界的一个球体)
+	*/
+	///<summary>getBoundingSphere</summary>
+	///<param name ="optionalTarget" type="THREE.Sphere()">可选参数,THREE.Sphere()球体对象,用来接收返回值</param>
+	///<returns type="THREE.Sphere()">返回当前立方体边界的球形边界(这里应该内切于立方体边界的一个球体)</returns>
 	getBoundingSphere: function () {
 
 		var v1 = new THREE.Vector3();
@@ -6214,10 +6228,10 @@ THREE.Box3.prototype = {
 
 			var result = optionalTarget || new THREE.Sphere();
 
-			result.center = this.center();
-			result.radius = this.size( v1 ).length() * 0.5;
+			result.center = this.center();	//将球体边界中心设置为当前立方体中心
+			result.radius = this.size( v1 ).length() * 0.5;		//设置球体边界的半径
 
-			return result;
+			return result;		//返回当前立方体边界的球形边界(这里应该内切于立方体边界的一个球体)
 
 		};
 
@@ -6253,6 +6267,13 @@ THREE.Box3.prototype = {
 
 	},
 
+
+	/*
+	///applyMatrix4方法通过传递matrix(旋转,缩放,移动等变换矩阵)对当前立方体对象的8个角点,应用变换.
+	*/
+	///<summary>applyMatrix4</summary>
+	///<param name ="matrix" type="Matrix4">(旋转,缩放,移动等变换矩阵</param>
+	///<returns type="Boolean">返回变换后的立方体边界.</returns>
 	applyMatrix4: function () {
 
 		var points = [
@@ -6269,6 +6290,7 @@ THREE.Box3.prototype = {
 		return function ( matrix ) {
 
 			// NOTE: I am using a binary pattern to specify all 2^3 combinations below
+			// NOTE: 作者通过3个二进制位表示8个角点.
 			points[ 0 ].set( this.min.x, this.min.y, this.min.z ).applyMatrix4( matrix ); // 000
 			points[ 1 ].set( this.min.x, this.min.y, this.max.z ).applyMatrix4( matrix ); // 001
 			points[ 2 ].set( this.min.x, this.max.y, this.min.z ).applyMatrix4( matrix ); // 010
@@ -6279,9 +6301,9 @@ THREE.Box3.prototype = {
 			points[ 7 ].set( this.max.x, this.max.y, this.max.z ).applyMatrix4( matrix );  // 111
 
 			this.makeEmpty();
-			this.setFromPoints( points );
+			this.setFromPoints( points );	//调用setFromPoints()方法,重新设置立方体边界.
 
-			return this;
+			return this;		//返回变换后的立方体边界.
 
 		};
 
