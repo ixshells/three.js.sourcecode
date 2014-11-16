@@ -5572,7 +5572,7 @@ THREE.Box2.prototype = {
 	/*
 	///center方法用来返回二维矩形边界的中点
 	*/
-	///<summary>makeEmpty</summary>
+	///<summary>center</summary>
 	///<param name ="optionalTarget" type="Vector2">可选参数,接收返回结果,边界的中点</param>
 	///<returns type="Vector2">返回二维矩形边界的中点</returns>
 	center: function ( optionalTarget ) {
@@ -5583,9 +5583,9 @@ THREE.Box2.prototype = {
 	},
 
 	/*
-	///center方法用来返回二维矩形边界尺寸的向量
+	///size方法用来返回二维矩形边界尺寸的向量
 	*/
-	///<summary>makeEmpty</summary>
+	///<summary>size</summary>
 	///<param name ="optionalTarget" type="Vector2">可选参数,接收返回结果,边界尺寸的向量</param>
 	///<returns type="Vector2">返回二维矩形边界尺寸的向量</returns>
 	size: function ( optionalTarget ) {
